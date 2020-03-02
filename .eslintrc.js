@@ -13,5 +13,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  },
+    semi: [1, 'never'], // 单引号
+    'comma-dangle': [2, 'never'] // 逗号不使用悬挂
+  }
 };
