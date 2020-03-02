@@ -1,7 +1,7 @@
 import layouts from '@/layouts'
 
 export default {
-  path: 'ablum',
+  path: 'album',
   component: layouts.AuthorisedLayout,
   children: [
     {
