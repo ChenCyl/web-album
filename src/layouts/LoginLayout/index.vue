@@ -1,9 +1,8 @@
 <template>
-  <div class="login-layout" >
+  <div class="login-layout">
     <div class="left-area"></div>
     <div class="right-area">
-      <div class="logo"></div>
-      <router-view />
+      <router-view class="content" />
     </div>
   </div>
 </template>
@@ -17,18 +16,17 @@ export default {
 <style lang="scss" scoped>
 .login-layout {
   display: flex;
+  height: 100%;
   .left-area {
-    flex: 2;
+    flex: 1;
     background: green;
   }
-  .left-area {
-    flex: 0 0 1;
-    // flex-shrink: 0;
-    padding: 20px;
-    .logo {
-      width: 200;
-      height: 36px;
-      background: green;
+  .right-area {
+    flex-basis: 500px;
+    background-color: aquamarine;
+    padding: 0 80px;
+    .content {
+      margin-top: 20vh;
     }
   }
 }

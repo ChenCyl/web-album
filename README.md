@@ -1,5 +1,15 @@
 # web-album
 
+## Note
+
+
+
+
+
+
+
+
+
 ## Project setup
 ```
 yarn install

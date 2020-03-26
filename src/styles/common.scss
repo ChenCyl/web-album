@@ -1,0 +1,24 @@
+
+// 垂直居中
+.center-v {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// 单行省略显示
+.single-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+
+
+// // 块元素水平居中
+// .center-h {
+//   margin: auto;
+// }
+// // 行内元素水平居中
+// .center-h-inline {
+//   text-align: center;
+// }

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import layouts from '../layouts'
 import login from './login'
 import album from './album'
+import Page404 from './404/index.vue'
 
 Vue.use(VueRouter)
 
@@ -18,7 +19,7 @@ const routes = [
   {
     path: '*',
     name: 'errorPage',
-    component: layouts.DefaultLayout
+    component: Page404
   }
 ]
 

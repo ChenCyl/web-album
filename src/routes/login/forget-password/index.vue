@@ -5,13 +5,13 @@
     <div class="title">注册账号</div>
     <div class="input-wrap">
       <el-input v-model="email" placeholder="请输入邮箱" prefix-icon="el-icon-user"></el-input>
-      <div class="vali-code-wrap">
-        <el-input v-model="password"
-                  placeholder="请输入验证码"
-                  prefix-icon="el-icon-lock">
-        </el-input>
-        <el-button type="primary" @click="getValiCode">获取验证码</el-button>
-      </div>
+      <el-input v-model="password"
+                placeholder="请输入验证码"
+                prefix-icon="el-icon-lock">
+        <template slot="append">
+          <el-button type="primary" @click="getValiCode"></el-button>
+        </template>
+      </el-input>
       <el-input v-model="password"
                 placeholder="请设置登录密码"
                 prefix-icon="el-icon-user"
@@ -53,13 +53,5 @@ export default {
 </script>
 
 <style lang="scss" scoped src="../style.scss">
-.vali-code-wrap{
-  // display: flex;
-  .el-input {
-    width: 50px !important;
-  }
-  // .el-button {
-  //   flex: 1;
-  // }
-}
+
 </style>
