@@ -5,7 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/essential',
-    '@vue/airbnb',
+    // '@vue/airbnb',
   ],
   parserOptions: {
     parser: 'babel-eslint',
@@ -63,7 +63,8 @@ module.exports = {
         "renderError"
       ]
     }],
-    "vue/html-indent": 2 // 强制缩进
+    "vue/html-indent": 2, // 强制缩进
+    "vue/script-indent": 2
   },
   // /* 全局变量 */
   // globals: {
