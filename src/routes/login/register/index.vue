@@ -24,7 +24,7 @@
               <el-button class="code-btn"
                          type="primary"
                          @click="getValiCode"
-                         :disabled="codeBtnDisabled">{{ codeBtnText}}</el-button>
+                         :disabled="codeBtnDisabled">{{ codeBtnText }}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -110,7 +110,14 @@ export default {
   },
   methods: {
     comfirm() {
-      console.log('click login')
+      this.$refs.registerForm.validate((valid) => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     goRegister() {
       this.$router.push('/login/register')
@@ -119,27 +126,25 @@ export default {
       this.$router.push('/login/forget-password')
     },
     getValiCode() {
-      this.$refs.registerForm.validateField('account', () => {
-        // if (err) return
+      this.$refs.registerForm.validateField('account', (err) => {
+        if (err) return
         this._getValiCode()
       })
     },
     _getValiCode() {
-      let interval
-      let sec = 60
+      let sec = 5 // FIXME: change to 60
+      this.codeBtnText = `${sec}s 后重试`
       this.codeBtnDisabled = true
-      this.codeBtnText = `${sec}s后重试`
-      return function () {
-        if (!interval) {
-          if (sec === 0) {
-            clearInterval(interval)
-          } else {
-            interval = setInterval(() => {
-              sec--
-            }, 1000)
-          }
+      let interval = setInterval(() => {
+        sec--
+        if (sec === 0) {
+          clearInterval(interval)
+          this.codeBtnText = `获取验证码`
+          this.codeBtnDisabled = false
+        } else {
+          this.codeBtnText = `${sec}s 后重试`
         }
-      }
+      }, 1000)
     }
   }
 }

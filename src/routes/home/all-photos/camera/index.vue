@@ -1,6 +1,6 @@
 <template>
   <div>
-    all-photos
+
   </div>
 </template>
 
@@ -9,3 +9,7 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>

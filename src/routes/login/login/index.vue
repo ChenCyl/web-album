@@ -69,7 +69,16 @@ export default {
   },
   methods: {
     login() {
-      console.log('click login')
+      // this.$refs.loginForm.validate((valid) => {
+      //   if (valid) {
+      //     alert('submit!')
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
+      // console.log('click login')
+      this.$router.push('/home/all-photos')
     },
     goRegister() {
       this.$router.push('/login/register')
