@@ -1,6 +1,6 @@
 <template>
   <div>
-    all-photos
+    all-ablums
   </div>
 </template>
 

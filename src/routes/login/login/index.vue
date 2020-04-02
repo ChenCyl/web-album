@@ -78,7 +78,7 @@ export default {
       //   }
       // })
       // console.log('click login')
-      this.$router.push('/home/all-photos')
+      this.$router.push('/photo')
     },
     goRegister() {
       this.$router.push('/login/register')

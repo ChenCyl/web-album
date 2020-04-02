@@ -1,3 +1,4 @@
+@import "./variables.scss";
 
 // 垂直居中
 .center-v {
@@ -10,7 +11,7 @@
 .single-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
-  
+
 }
 
 
@@ -22,3 +23,38 @@
 // .center-h-inline {
 //   text-align: center;
 // }
+
+/* 字体(typography)
+ ------------------- */
+
+.typo-h1 {
+  color: $color-text-primary;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.typo-h2 {
+  color: $color-text-primary;
+  font-size: 18px;
+}
+
+.typo-h3 {
+  color: $color-text-primary;
+  font-size: 16px;
+}
+
+.typo-base {
+  color: $color-text-regular;
+  font-size: 14px;
+}
+
+.typo-base-s {
+  color: $color-text-regular;
+  font-size: 13px;
+}
+
+.typo-sec {
+  color: $color-text-secondary;
+  font-size: 12px;
+}
+
