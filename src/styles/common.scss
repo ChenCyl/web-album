@@ -1,5 +1,8 @@
 @import "./variables.scss";
 
+/* 位置
+ ------------------- */
+
 // 垂直居中
 .center-v {
   position: absolute;
@@ -11,7 +14,7 @@
 .single-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
-
+  white-space: nowrap;
 }
 
 
@@ -58,3 +61,34 @@
   font-size: 12px;
 }
 
+/* 其他样式
+ ------------------- */
+ 
+.with-shadow {
+  box-shadow: 0 2px 20px 0 $border-color-base;
+}
+
+.text-btn {
+  color: $color-text-regular;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.highlight {
+  font-size: 14px;
+  color: $color-warning;
+}
+
+
+/* el 样式
+ ------------------- */
+.el-dropdown-link {
+  cursor: pointer;
+  color: $color-primary;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}

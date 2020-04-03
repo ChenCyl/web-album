@@ -3,7 +3,7 @@
 
     <div class="select-wrap">
       <div class="label typo-base">拍摄日期</div>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="请选择" size="small">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -15,7 +15,7 @@
 
     <div class="select-wrap">
       <div class="label typo-base">照相机</div>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="请选择" size="small">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -27,7 +27,7 @@
 
     <div class="select-wrap">
       <div class="label typo-base">等级</div>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="value" placeholder="请选择" size="small">
         <el-option
           v-for="item in options"
           :key="item.value"

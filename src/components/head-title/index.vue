@@ -1,5 +1,5 @@
 <template>
-  <div class="head-title">
+  <div class="head-title with-shadow">
     <span class="typo-h1">{{ title }}</span>
     <div v-if="$slots.button" class="button-wrap">
       <slot name="button"></slot>
@@ -27,7 +27,6 @@ export default {
   background-color: $color-white;
   margin: -20px -20px 20px -20px;
   padding: 20px;
-  box-shadow: 0 2px 20px 0 $border-color-base;
   position: relative;
 }
 

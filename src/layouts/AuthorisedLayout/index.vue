@@ -121,6 +121,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid $border-color-lighter;
 
   .collapse-btn {
     font-size: 27px;
@@ -133,19 +134,14 @@ export default {
     margin-left: auto;
     margin-right: 20px;
   }
-
-  .account-wrap {
-    .el-dropdown-link {
-      cursor: pointer;
-      color: $color-primary;
-    }
-    .el-icon-arrow-down {
-      font-size: 12px;
-    }
-  }
 }
 
 .el-main {
   background-color: $background-color-base;
+}
+
+.el-footer {
+  z-index: 1;
+  box-shadow: 0px -2px 20px 0 $border-color-base;
 }
 </style>
