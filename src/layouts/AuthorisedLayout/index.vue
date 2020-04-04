@@ -62,7 +62,20 @@
         <router-view></router-view>
       </el-main>
 
-      <el-footer>Footer</el-footer>
+      <transition name="collapse-ttb">
+        <el-footer v-if="visible">
+          <el-checkbox :value="isCheckedAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <div class="config-wrap">
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加到相册</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加等级</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加标签</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">分享</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">幻灯片</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">下载</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-edit">删除</el-button>
+          </div>
+        </el-footer>
+      </transition>
     </el-container>
 
   </el-container>
@@ -70,6 +83,7 @@
 
 <script>
 import theLogo from '@/components/the-logo'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -82,11 +96,21 @@ export default {
       searchKey: ''
     }
   },
+  computed: {
+    ...mapState('footer', ['visible', 'isCheckedAll', 'config'])
+  },
   mounted() {
-    console.log(this.routes)
+    console.log('routes', this.routes)
   },
   methods: {
+    ...mapMutations('footer', ['handleClickAll']),
     handleCommand() {
+
+    },
+    handleCheckAllChange(val) {
+      this.handleClickAll(val)
+    },
+    addToAblum() {
 
     }
   }
@@ -98,6 +122,7 @@ export default {
 @import "@/styles/variables";
 
 .el-container {
+  background-color: $background-color-base;
   height: 100%;
   .el-aside {
     height: 100%;
@@ -122,6 +147,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid $border-color-lighter;
+  background-color: $color-white;
 
   .collapse-btn {
     font-size: 27px;
@@ -137,11 +163,16 @@ export default {
 }
 
 .el-main {
-  background-color: $background-color-base;
+  // background-color: $background-color-base;
 }
 
 .el-footer {
   z-index: 1;
-  box-shadow: 0px -2px 20px 0 $border-color-base;
+  box-shadow: 0px -2px 10px 0 $border-color-base;
+  background-color: $color-white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // .config-wrap {}
 }
 </style>

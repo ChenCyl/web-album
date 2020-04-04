@@ -37,7 +37,6 @@
             <div class="switch-display el-icon-set-up text-btn"></div>
           </el-tooltip>
         </div>
-        <!-- <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
 
       </div>
       <div class="photo-cont">
@@ -72,8 +71,10 @@
 
 <script>
 import PhotoSelectors from '@/routes/home/components/photo-selectors'
+import { mapState, mapMutations } from 'vuex'
 
 const cityOptions = ['上海', '北京', '广州', '深圳']
+
 export default {
   components: {
     PhotoSelectors
@@ -81,9 +82,8 @@ export default {
   data() {
     return {
       checkAll: false,
-      checkedCities: ['上海', '北京'],
+      checkedCities: [],
       cities: cityOptions,
-      isIndeterminate: true,
       srcList: [
         'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
@@ -91,15 +91,36 @@ export default {
       ]
     }
   },
-  methods: {
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : []
-      this.isIndeterminate = false
+  computed: {
+    ...mapState('footer', ['clickAll'])
+  },
+  watch: {
+    checkedCities: {
+      handler(val) {
+        if (val.length > 0) {
+          this.showFooter()
+          if (val.length === cityOptions.length) {
+            this.footerCheckAll(true)
+          } else {
+            this.footerCheckAll(false)
+          }
+        }
+        else {
+          this.hideFooter()
+          this.footerCheckAll(false)
+        }
+      },
+      immediate: true
     },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length
-      this.checkAll = checkedCount === this.cities.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+    clickAll(val) {
+      if (val) { this.checkedCities = cityOptions }
+      else { this.checkedCities = [] }
+    }
+  },
+  methods: {
+    ...mapMutations('footer', ['showFooter', 'hideFooter', 'footerCheckAll']),
+    handleCheckedCitiesChange(val) {
+
     },
     viewDetail() {
 

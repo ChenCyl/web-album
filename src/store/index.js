@@ -1,16 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import footer from './modules/footer'
+
 Vue.use(Vuex)
 
-// TOOD: footer
 export default new Vuex.Store({
   state: {
+
   },
   mutations: {
+
   },
   actions: {
+
   },
   modules: {
+    footer
   }
 })

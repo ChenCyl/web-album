@@ -92,3 +92,13 @@
 .el-icon-arrow-down {
   font-size: 12px;
 }
+
+
+/* el 样式
+ ------------------- */
+.collapse-ttb-enter-active, .collapse-ttb-leave-active {
+  transition: transform .3s;
+}
+.collapse-ttb-enter, .collapse-ttb-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  transform: translateY(60px)
+}
