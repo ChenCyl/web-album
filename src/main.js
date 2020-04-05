@@ -7,15 +7,19 @@ import store from './store'
 import '@/styles/index.scss'
 
 import HeadTitle from '@/components/head-title'
+import DetailDrawer from '@/components/detail-drawer'
 
 // 全局组件
 Vue.component('head-title', HeadTitle)
+Vue.prototype.$detail = DetailDrawer
 
+// 外部组件库
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
-new Vue({
+// 创建实例并赋值给 Bus
+Vue.prototype.$bus = new Vue({
   router,
   store,
   render: (h) => h(App)

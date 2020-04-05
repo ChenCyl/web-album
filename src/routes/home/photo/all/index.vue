@@ -11,6 +11,7 @@
     </head-title>
 
     <div class="content with-shadow">
+
       <div class="op-cont typo-base">
         <div class="total">
           共 <span class="highlight">112</span> 张照片
@@ -33,22 +34,39 @@
           <div class="search">
             <el-input size="small" placeholder="输入相片名称"></el-input>
           </div>
-          <el-tooltip content="切换视图" placement="bottom" effect="light">
+          <el-tooltip content="切换视图" placement="top" effect="light">
             <div class="switch-display el-icon-set-up text-btn"></div>
           </el-tooltip>
         </div>
-
       </div>
+
       <div class="photo-cont">
-        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-          <div v-for="city in cities"
+        <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
+        <el-checkbox-group v-model="checkedOptions" @change="handleCheckedOptionsChange">
+          <div v-for="city in pageOptions"
                :key="city"
                :class="{
                  'photo-wrap': true,
-                 'photo-checked': checkedCities.indexOf(city) > -1}">
+                 'photo-checked': checkedOptions.indexOf(city) > -1}">
             <div class="op-wrap">
               <el-checkbox :label="city"></el-checkbox>
-              <div class="text-btn" @click="viewDetail">详情</div>
+              <div>
+                <!-- <el-tooltip content="查看详细参数" placement="top" effect="light"> -->
+                <i class="text-btn el-icon-camera" @click="viewDetail" title="查看详细参数"></i>
+                <!-- </el-tooltip> -->
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    <i class="text-btn el-icon-more-outline"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
             </div>
             <div class="image-wrap">
               <el-image style="width: 150px; height: 140px"
@@ -63,66 +81,61 @@
           </div>
         </el-checkbox-group>
       </div>
-    </div>
 
+      <el-pagination background
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[100, 200, 300, 400]"
+                     :page-size="100"
+                     layout="sizes, prev, pager, next, jumper"
+                     :total="400">
+      </el-pagination>
+
+    </div>
 
   </div>
 </template>
 
 <script>
 import PhotoSelectors from '@/routes/home/components/photo-selectors'
-import { mapState, mapMutations } from 'vuex'
-
-const cityOptions = ['上海', '北京', '广州', '深圳']
+import footerMixin from '@/core/mixins/footerMixin'
 
 export default {
   components: {
     PhotoSelectors
   },
+  mixins: [ footerMixin ],
   data() {
     return {
       checkAll: false,
-      checkedCities: [],
-      cities: cityOptions,
+      checkedOptions: [], // NOTE: 必须使用该命名
+      pageOptions: ['上海', '北京', '广州', '深圳'], // NOTE: 必须使用该命名
       srcList: [
         'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
         'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
         'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-      ]
+      ],
+
+      currentPage: 1
+
     }
   },
   computed: {
-    ...mapState('footer', ['clickAll'])
   },
   watch: {
-    checkedCities: {
-      handler(val) {
-        if (val.length > 0) {
-          this.showFooter()
-          if (val.length === cityOptions.length) {
-            this.footerCheckAll(true)
-          } else {
-            this.footerCheckAll(false)
-          }
-        }
-        else {
-          this.hideFooter()
-          this.footerCheckAll(false)
-        }
-      },
-      immediate: true
-    },
-    clickAll(val) {
-      if (val) { this.checkedCities = cityOptions }
-      else { this.checkedCities = [] }
-    }
+
   },
   methods: {
-    ...mapMutations('footer', ['showFooter', 'hideFooter', 'footerCheckAll']),
-    handleCheckedCitiesChange(val) {
+    viewDetail() {
+      this.$detail('ddddd')
+    },
+
+    handleSizeChange() {
 
     },
-    viewDetail() {
+
+    handleCurrentChange() {
 
     }
   }
@@ -175,13 +188,18 @@ export default {
     .op-wrap {
       display: flex;
       justify-content: space-between;
-      // padding: 10px;
+      align-items: center;
       /deep/ .el-checkbox__label {
         visibility: hidden;
+      }
+      .text-btn {
+        font-size: 16px;
+        margin-left: 10px;
       }
     }
 
     .image-wrap {
+
     }
 
     .title-wrap {
@@ -191,5 +209,10 @@ export default {
       }
     }
   }
+
+  .el-pagination {
+    text-align: right;
+  }
+
 }
 </style>

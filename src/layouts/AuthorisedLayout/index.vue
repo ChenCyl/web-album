@@ -63,8 +63,8 @@
       </el-main>
 
       <transition name="collapse-ttb">
-        <el-footer v-if="visible">
-          <el-checkbox :value="isCheckedAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <el-footer v-if="footerVisible">
+          <el-checkbox v-model="allChecked" @change="handleCheckAllChange">全选</el-checkbox>
           <div class="config-wrap">
             <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加到相册</el-button>
             <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加等级</el-button>
@@ -83,7 +83,6 @@
 
 <script>
 import theLogo from '@/components/the-logo'
-import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -93,22 +92,32 @@ export default {
     return {
       isCollapse: false,
       routes: this.$router.options.routes[0].children[0].children,
-      searchKey: ''
+      searchKey: '',
+      allChecked: false,
+      footerVisible: false
     }
-  },
-  computed: {
-    ...mapState('footer', ['visible', 'isCheckedAll', 'config'])
   },
   mounted() {
     console.log('routes', this.routes)
   },
+  created() {
+    this.$bus.$on('clickOption', (val) => {
+      console.log('clickOption', val)
+      this.allChecked = val.allChecked
+      this.footerVisible = val.footerVisible
+    })
+  },
+  beforeDestroy() {
+    this.$bus.$off('clickOption')
+  },
   methods: {
-    ...mapMutations('footer', ['handleClickAll']),
     handleCommand() {
 
     },
+    // 点击全选事件 -> 子组件数据改变
+    // 子组件数据改变 -> 全选值改变
     handleCheckAllChange(val) {
-      this.handleClickAll(val)
+      this.$bus.$emit('clickAll', val)
     },
     addToAblum() {
 
