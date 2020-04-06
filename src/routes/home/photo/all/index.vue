@@ -59,11 +59,12 @@
                     <i class="text-btn el-icon-more-outline"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-files">添加到相册</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-star-off">添加等级</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-price-tag">添加标签</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-share">分享</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-download">下载</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-close">删除</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>

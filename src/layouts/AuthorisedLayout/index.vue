@@ -66,13 +66,13 @@
         <el-footer v-if="footerVisible">
           <el-checkbox v-model="allChecked" @change="handleCheckAllChange">全选</el-checkbox>
           <div class="config-wrap">
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加到相册</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加等级</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">添加标签</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">分享</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">幻灯片</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">下载</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-edit">删除</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-files">添加到相册</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-star-off">添加等级</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-price-tag">添加标签</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-data-board">幻灯片</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-share">分享</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-download">下载</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-close">删除</el-button>
           </div>
         </el-footer>
       </transition>
@@ -182,6 +182,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // .config-wrap {}
+  .config-wrap {
+    .el-button {
+      margin-left: 20px;
+    }
+
+  }
 }
 </style>
