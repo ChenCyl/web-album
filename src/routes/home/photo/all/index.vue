@@ -52,7 +52,7 @@
               <el-checkbox :label="city"></el-checkbox>
               <div>
                 <!-- <el-tooltip content="查看详细参数" placement="top" effect="light"> -->
-                <i class="text-btn el-icon-camera" @click="viewDetail" title="查看详细参数"></i>
+                <i class="text-btn el-icon-view" @click="viewDetail" title="查看详细参数"></i>
                 <!-- </el-tooltip> -->
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">

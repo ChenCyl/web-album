@@ -67,8 +67,8 @@
           <el-checkbox v-model="allChecked" @change="handleCheckAllChange">全选</el-checkbox>
           <div class="config-wrap">
             <el-button type="text" @click="addToAblum" icon="el-icon-files">添加到相册</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-star-off">添加等级</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-price-tag">添加标签</el-button>
+            <el-button type="text" @click="addRate" icon="el-icon-star-off">添加等级</el-button>
+            <el-button type="text" @click="addTag" icon="el-icon-price-tag">添加标签</el-button>
             <el-button type="text" @click="addToAblum" icon="el-icon-data-board">幻灯片</el-button>
             <el-button type="text" @click="addToAblum" icon="el-icon-share">分享</el-button>
             <el-button type="text" @click="addToAblum" icon="el-icon-download">下载</el-button>
@@ -77,6 +77,55 @@
         </el-footer>
       </transition>
     </el-container>
+
+    <el-dialog
+      title="请选择相册"
+      :visible.sync="albumDialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      class="album-dialog">
+      <el-radio-group v-model="radio">
+        <el-radio v-for="album in albums" :key="album.id" :label="album.id">
+          <el-image style="width: 50px; height: 50px"
+                    :src="album.src"
+                    fit="cover"></el-image>
+          <div class="name single-ellipsis" :title="album.name">{{ album.name }}</div>
+        </el-radio>
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="albumDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="albumDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="请评分"
+      :visible.sync="rateDialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      class="rate-dialog">
+      <el-rate allow-half
+               v-model="rateValue"
+               text-color="#ff9900"
+               show-score></el-rate>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="rateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="rateDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="请添加标签"
+      :visible.sync="tagDialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      class="tag-dialog">
+      <!-- TODO: 接口mock了 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="tagDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="tagDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
 
   </el-container>
 </template>
@@ -94,13 +143,45 @@ export default {
       routes: this.$router.options.routes[0].children[0].children,
       searchKey: '',
       allChecked: false,
-      footerVisible: false
+      footerVisible: false,
+      albumDialogVisible: false,
+      albums: [{
+        id: 'sdffdsfa',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森动物之森动物之森动物之森'
+      },{
+        id: 'sdffdsfa1',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森'
+      },{
+        id: 'sdffdsfa2',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森'
+      },{
+        id: 'sdffdsfa3',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森'
+      },{
+        id: 'sdffdsfa24',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森'
+      },{
+        id: 'sdffdsfa25',
+        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        name: '动物之森'
+      }],
+      radio: '',
+      ratePopVisible: false,
+      rateValue: null,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      rateDialogVisible: false,
+      tagDialogVisible: false
     }
   },
   mounted() {
     console.log('routes', this.routes)
   },
-  created() {
+  mounted() {
     this.$bus.$on('clickOption', (val) => {
       console.log('clickOption', val)
       this.allChecked = val.allChecked
@@ -120,7 +201,16 @@ export default {
       this.$bus.$emit('clickAll', val)
     },
     addToAblum() {
-
+      this.albumDialogVisible = true
+    },
+    handleClose(done) {
+      done()
+    },
+    addRate() {
+      this.rateDialogVisible = true
+    },
+    addTag() {
+      this.tagDialogVisible = true
     }
   }
 }
@@ -187,6 +277,35 @@ export default {
       margin-left: 20px;
     }
 
+  }
+}
+
+.album-dialog {
+  .el-radio-group {
+    max-height: 360px;
+    overflow: auto;
+  }
+  .el-radio {
+    display: block;
+    margin-bottom: 20px;
+    .el-image {
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    .name {
+      display: inline-block;
+      margin-left: 20px;
+      max-width: 160px;
+    }
+  }
+}
+
+.rate-dialog {
+  /deep/ .el-rate__icon {
+    font-size: 26px;
+  }
+  /deep/ .el-rate__text {
+    font-size: 20px;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 export default {
-  created() {
+  mounted() {
     this.$bus.$on('clickAll', val => {
       console.log('clickAll', val)
       if (val) { this.checkedOptions = this.pageOptions }

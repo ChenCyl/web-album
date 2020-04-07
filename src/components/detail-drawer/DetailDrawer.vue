@@ -4,7 +4,8 @@
       title="照片详情"
       size="500px"
       :visible.sync="visible"
-      direction="rtl">
+      direction="rtl"
+      :modal="false">
       <div class="detail-cont">
         <el-image style="height: 340px"
                   src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
@@ -12,7 +13,7 @@
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane name="basicInfo">
             <span slot="label">
-              <el-tooltip content="基本信息" placement="bottom" effect="dark">
+              <el-tooltip content="基本信息" placement="bottom" effect="light">
                 <i class="icon-label el-icon-picture-outline"></i>
               </el-tooltip>
             </span>
@@ -33,7 +34,7 @@
           </el-tab-pane>
           <el-tab-pane name="fileInfo">
             <span slot="label">
-              <el-tooltip content="文件信息" placement="bottom" effect="dark">
+              <el-tooltip content="文件信息" placement="bottom" effect="light">
                 <i class="icon-label el-icon-document"></i>
               </el-tooltip>
             </span>
@@ -57,7 +58,7 @@
           </el-tab-pane>
           <el-tab-pane name="cameraInfo">
             <span slot="label">
-              <el-tooltip content="相机信息" placement="bottom" effect="dark">
+              <el-tooltip content="相机信息" placement="bottom" effect="light">
                 <i class="icon-label el-icon-camera"></i>
               </el-tooltip>
             </span>
@@ -75,7 +76,7 @@
           </el-tab-pane>
           <el-tab-pane name="photoInfo">
             <span slot="label">
-              <el-tooltip content="拍摄数据" placement="bottom" effect="dark">
+              <el-tooltip content="拍摄数据" placement="bottom" effect="light">
                 <i class="icon-label el-icon-video-camera"></i>
               </el-tooltip>
             </span>
@@ -126,7 +127,7 @@
           </el-tab-pane>
           <el-tab-pane name="locationInfo">
             <span slot="label">
-              <el-tooltip content="位置信息" placement="bottom" effect="dark">
+              <el-tooltip content="位置信息" placement="bottom" effect="light">
                 <i class="icon-label el-icon-location-information"></i>
               </el-tooltip>
             </span>
@@ -195,7 +196,7 @@ export default {
   }
 }
 .detail-cont {
-  padding: 0 20px;
+  padding: 0 20px 20px 20px;
 }
 
 .icon-label {
