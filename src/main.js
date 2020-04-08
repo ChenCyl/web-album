@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './routes'
 import store from './store'
 import '@/styles/index.scss'
+import moment from 'moment'
 
 import HeadTitle from '@/components/head-title'
 import DetailDrawer from '@/components/detail-drawer'
@@ -15,6 +16,9 @@ Vue.prototype.$detail = DetailDrawer
 
 // 外部组件库
 Vue.use(ElementUI)
+
+// 全局方法
+window.$moment = moment
 
 Vue.config.productionTip = false
 

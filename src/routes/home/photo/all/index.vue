@@ -11,7 +11,7 @@
     </head-title>
 
     <div class="content with-shadow">
-
+      <!-- 图片操作区 -->
       <div class="op-cont typo-base">
         <div class="total">
           共 <span class="highlight">112</span> 张照片
@@ -39,21 +39,19 @@
           </el-tooltip>
         </div>
       </div>
-
+      <!-- 图片陈列区 -->
       <div class="photo-cont">
         <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
         <el-checkbox-group v-model="checkedOptions" @change="handleCheckedOptionsChange">
-          <div v-for="city in pageOptions"
-               :key="city"
+          <div v-for="option in pageOptions"
+               :key="option.id"
                :class="{
                  'photo-wrap': true,
-                 'photo-checked': checkedOptions.indexOf(city) > -1}">
+                 'photo-checked': checkedOptions.indexOf(option.id) > -1}">
             <div class="op-wrap">
-              <el-checkbox :label="city"></el-checkbox>
+              <el-checkbox :label="option.id"></el-checkbox>
               <div>
-                <!-- <el-tooltip content="查看详细参数" placement="top" effect="light"> -->
-                <i class="text-btn el-icon-view" @click="viewDetail" title="查看详细参数"></i>
-                <!-- </el-tooltip> -->
+                <i class="text-btn el-icon-view" @click="viewDetail(option.id)" title="查看详细参数"></i>
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
                     <i class="text-btn el-icon-more-outline"></i>
@@ -71,28 +69,28 @@
             </div>
             <div class="image-wrap">
               <el-image style="width: 150px; height: 140px"
-                        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                        :src="option.sImgUrl"
                         fit="contain"
-                        :preview-src-list="srcList"></el-image>
+                        :preview-src-list="[option.sImgUrl]"></el-image>
+                        <!-- FIXME: sImgUrl => lImgUrl -->
             </div>
             <div class="title-wrap typo-base">
-              <div class="title single-ellipsis" title="nia">你好</div>
-              <div class="fix">.jpg</div>
+              <div class="title single-ellipsis" title="nia">{{option.title}}</div>
+              <div class="format">.{{option.format}}</div>
             </div>
           </div>
         </el-checkbox-group>
       </div>
-
+      <!-- 分页 -->
       <el-pagination background
                      @size-change="handleSizeChange"
                      @current-change="handleCurrentChange"
                      :current-page="currentPage"
-                     :page-sizes="[100, 200, 300, 400]"
-                     :page-size="100"
+                     :page-sizes="[20, 40, 80]"
+                     :page-size="pageSize"
                      layout="sizes, prev, pager, next, jumper"
                      :total="400">
       </el-pagination>
-
     </div>
 
   </div>
@@ -101,6 +99,7 @@
 <script>
 import PhotoSelectors from '@/routes/home/components/photo-selectors'
 import footerMixin from '@/core/mixins/footerMixin'
+import { photoService } from '@/request/services'
 
 export default {
   components: {
@@ -111,15 +110,9 @@ export default {
     return {
       checkAll: false,
       checkedOptions: [], // NOTE: 必须使用该命名
-      pageOptions: ['上海', '北京', '广州', '深圳'], // NOTE: 必须使用该命名
-      srcList: [
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-      ],
-
-      currentPage: 1
-
+      pageOptions: [], // NOTE: 必须使用该命名
+      currentPage: 1,
+      pageSize: 20
     }
   },
   computed: {
@@ -127,17 +120,40 @@ export default {
   watch: {
 
   },
+  created() {
+    this._getPhoto()
+  },
   methods: {
-    viewDetail() {
+    viewDetail(id) {
       this.$detail('ddddd')
     },
-
-    handleSizeChange() {
-
+    handleSizeChange(size) {
+      this.pageSize = size
+      this._getPhoto()
     },
+    handleCurrentChange(page) {
+      this.currentPage = page
+      this._getPhoto()
+    },
+    async _getPhoto() {
+      let res = await photoService.getPhotos({
+        page: this.currentPage,
+        size: this.pageSize
+      })
+      console.log(res)
 
-    handleCurrentChange() {
+      // let imgUrlList = res.data.map(img => img.sImgUrl)
 
+      // res.data.forEach(img => {
+
+      //   img.urlList = imgUrlList
+
+      //   let topItem = imgUrlList.shift()
+      //   imgUrlList.push(topItem)
+
+      // })
+
+      this.pageOptions = res.data
     }
   }
 }
@@ -192,6 +208,7 @@ export default {
       align-items: center;
       /deep/ .el-checkbox__label {
         visibility: hidden;
+        width: 80px;
       }
       .text-btn {
         font-size: 16px;
@@ -200,13 +217,17 @@ export default {
     }
 
     .image-wrap {
-
+      margin: 5px 0;
     }
 
     .title-wrap {
       display: flex;
+      max-width: 150px;
       .title {
         max-width: 126px;
+      }
+      .format {
+        white-space: nowrap;
       }
     }
   }
