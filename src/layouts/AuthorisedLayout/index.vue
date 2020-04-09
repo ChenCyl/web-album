@@ -16,6 +16,7 @@
             <span>{{ route.meta.title }}</span>
           </template>
           <template v-for="subRoute in route.children">
+            <!-- 未整理 -->
             <el-menu-item-group v-if="subRoute.meta.group" :key="subRoute.name">
               <template slot="title">{{subRoute.meta.group}}</template>
               <el-menu-item :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
@@ -25,6 +26,16 @@
                 </template>
               </el-menu-item>
             </el-menu-item-group>
+            <!-- 拍摄日期 -->
+            <!-- <el-submenu v-if="" :index="{name:'photo-date'}">
+              <template slot="title"></template>
+              <el-menu-item v-for="(item, subIndex) in item"
+                :index="subIndex + 1"
+                :key="item.key">>
+                  {{item.}}
+              </el-menu-item>
+            </el-submenu> -->
+
             <el-menu-item v-else :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
               <template slot="title">
                 <i :class="subRoute.meta.icon"></i>
@@ -104,10 +115,11 @@
       width="30%"
       :before-close="handleClose"
       class="rate-dialog">
-      <el-rate allow-half
-               v-model="rateValue"
-               text-color="#ff9900"
-               show-score></el-rate>
+      <el-rate
+        v-model="rateValue"
+        text-color="#ff9900"
+        show-score>
+      </el-rate>
       <span slot="footer" class="dialog-footer">
         <el-button @click="rateDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="rateDialogVisible = false">确 定</el-button>

@@ -7,10 +7,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    filter: {
+      dates: [],
+      tags: []
+    },
+    dateTree: {}
   },
   mutations: {
-
+    updateFilter(state, payload) {
+      state.filter = payload
+    }
   },
   actions: {
 

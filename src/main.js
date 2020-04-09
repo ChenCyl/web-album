@@ -6,6 +6,7 @@ import router from './routes'
 import store from './store'
 import '@/styles/index.scss'
 import moment from 'moment'
+import macro from '@/core/data/macro'
 
 import HeadTitle from '@/components/head-title'
 import DetailDrawer from '@/components/detail-drawer'
@@ -19,6 +20,7 @@ Vue.use(ElementUI)
 
 // 全局方法
 window.$moment = moment
+window.$macro = macro
 
 Vue.config.productionTip = false
 

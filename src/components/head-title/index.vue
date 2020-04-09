@@ -1,6 +1,14 @@
 <template>
   <div class="head-title with-shadow">
-    <span class="typo-h1">{{ title }}</span>
+    <div class="typo-h1">
+      <span>{{ title }}</span>
+      <el-tooltip v-if="intro"
+                  :content="intro"
+                  placement="right"
+                  effect="light">
+        <i class="el-icon-info intro"></i>
+      </el-tooltip>
+    </div>
     <div v-if="$slots.button" class="button-wrap">
       <slot name="button"></slot>
     </div>
@@ -15,7 +23,7 @@
 export default {
   props: {
     title: String,
-    info: String
+    intro: String
   }
 }
 </script>
@@ -35,6 +43,12 @@ export default {
   top: 0;
   right: 20px;
   line-height: 68px;
+}
+
+.intro {
+  color: $color-warning;
+  margin-left: 8px;
+  font-size: 16px;
 }
 
 </style>

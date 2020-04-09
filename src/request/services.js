@@ -10,22 +10,14 @@ export const photoService = {
       method: 'post',
       data
     })
-  }
+  },
 
-}
-
-export const filterService = {
-
-  // 获取拍摄日期（三级：年、月、日）
-  getDate() {
+  getFilters() {
     return request({
-      url: '/getDate',
+      url: '/getFilters',
       method: 'get'
     })
   }
 
 }
 
-// export default {
-//   photoService
-// }
