@@ -10,7 +10,7 @@
         <!-- @open="handleOpen"
           @close="handleClose"> -->
         <div class="logo-wrap"><the-logo /></div>
-        <el-submenu v-for="route in routes" :key="route.name" :index="`/${route.path}`">
+        <el-submenu v-for="route in routes" :key="route.name" :index="route.name">
           <template slot="title">
             <i :class="route.meta.icon"></i>
             <span>{{ route.meta.title }}</span>
@@ -27,15 +27,34 @@
               </el-menu-item>
             </el-menu-item-group>
             <!-- 拍摄日期 -->
-            <!-- <el-submenu v-if="" :index="{name:'photo-date'}">
-              <template slot="title"></template>
-              <el-menu-item v-for="(item, subIndex) in item"
-                :index="subIndex + 1"
-                :key="item.key">>
-                  {{item.}}
-              </el-menu-item>
-            </el-submenu> -->
-
+            <el-submenu v-else-if="subRoute.name === 'photo-date'" :index="subRoute.name" :key="subRoute.name">
+              <template slot="title">
+                <i :class="subRoute.meta.icon"></i>
+                <span>{{ subRoute.meta.title }}</span>
+              </template>
+              <el-submenu v-for="node in Object.keys(dateTree)"
+                          :index="node"
+                          :key="node">
+                <template slot="title">
+                  <span>{{ node }}</span>
+                </template>
+                <el-submenu v-for="node2 in Object.keys(dateTree[node])"
+                            :index="node2"
+                            :key="node2">
+                  <template slot="title">
+                    <span>{{ node2 }}</span>
+                  </template>
+                  <el-menu-item v-for="node3 in dateTree[node][node2]"
+                                :index="`/photo/date/${node3.fullDate}`"
+                                :key="node3.fullDate">
+                    <template slot="title">
+                      <span>{{ node3.day }}</span>
+                    </template>
+                  </el-menu-item>
+                </el-submenu>
+              </el-submenu>
+            </el-submenu>
+            <!-- 其余侧边导航 -->
             <el-menu-item v-else :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
               <template slot="title">
                 <i :class="subRoute.meta.icon"></i>
@@ -144,6 +163,7 @@
 
 <script>
 import theLogo from '@/components/the-logo'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -190,10 +210,12 @@ export default {
       tagDialogVisible: false
     }
   },
-  mounted() {
-    console.log('routes', this.routes)
+  computed: {
+    ...mapState(['dateTree'])
   },
   mounted() {
+    console.log('routes', this.routes)
+
     this.$bus.$on('clickOption', (val) => {
       console.log('clickOption', val)
       this.allChecked = val.allChecked

@@ -117,6 +117,7 @@ export default {
     this._getFilters()
   },
   methods: {
+    // TODO: 拿到菜单渲染之前
     ...mapMutations(['updateFilter']),
     async _getFilters() {
       let res = await photoService.getFilters()
