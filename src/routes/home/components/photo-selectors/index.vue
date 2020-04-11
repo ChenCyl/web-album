@@ -93,45 +93,34 @@
 </template>
 
 <script>
-import { photoService } from '@/request/services'
-import { mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
       albumValue:[],
-      albumOptions: [],
       dateValue: [],
-      datePickerOptions: {
-        disabledDate: null
-      },
       cameraValue: [],
-      cameraOptions: [],
       rateValue: [],
       rateOptions: $macro.RATE_LIST,
-      tagValue: [],
-      tagOptions: []
+      tagValue: []
     }
   },
-  created() {
-    this._getFilters()
+  computed: {
+    ...mapState({
+      albumOptions: state => state.filter.albums,
+      datePickerOptions: state => {
+        let disabledDate = pickDate => {
+          let pickFormatDate = $moment(pickDate).format("YYYY-MM-DD")
+          return state.filter.dates.indexOf(pickFormatDate) < 0
+        }
+        return { disabledDate }
+      },
+      cameraOptions: state => state.filter.cameras,
+      tagOptions: state => state.filter.tags
+    })
   },
   methods: {
-    // TODO: 拿到菜单渲染之前
-    ...mapMutations(['updateFilter']),
-    async _getFilters() {
-      let res = await photoService.getFilters()
-
-      this.albumOptions = res.data.albums || []
-      let dates = res.data.dates || []
-      this.datePickerOptions.disabledDate = pickDate => {
-        let pickFormatDate = $moment(pickDate).format("YYYY-MM-DD")
-        return dates.indexOf(pickFormatDate) < 0
-      }
-      this.cameraOptions = res.data.cameras || []
-      this.tagOptions = res.data.tags || []
-      this.updateFilter(res.data)
-    },
     handleChange() {
       this.$emit('change', {
         albums: this.albumValue,

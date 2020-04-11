@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import footer from './modules/footer'
+import { photoService } from '@/request/services'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ export default new Vuex.Store({
       dates: [],
       tags: []
     },
-    dateTree: {}
+    dateTree: [],
+    checkDates: []
   },
   mutations: {
     updateFilter(state, payload) {
@@ -25,29 +27,55 @@ export default new Vuex.Store({
         if (tree[dateArr[0]]) {
           if (tree[dateArr[0]][dateArr[1]]) {
             tree[dateArr[0]][dateArr[1]].push({
-              day: dateArr[2],
+              label: dateArr[2],
               fullDate: date
             })
           } else {
             tree[dateArr[0]][dateArr[1]] = [{
-              day: dateArr[2],
+              label: dateArr[2],
               fullDate: date
             }]
           }
         } else {
           tree[dateArr[0]] = {}
           tree[dateArr[0]][dateArr[1]] = [{
-            day: dateArr[2],
+            label: dateArr[2],
             fullDate: date
           }]
         }
       })
-      state.dateTree = tree
+      // 格式化 tree
+      let formatTree = []
+      for (let year of Object.keys(tree)) {
+        let node = {
+          label: year,
+          children: []
+        }
+        for(let month of Object.keys(tree[year])) {
+          node.children.push({
+            label: month,
+            children: tree[year][month]
+          })
+        }
+        formatTree.push(node)
+      }
+      state.dateTree = formatTree
       console.log(state.dateTree)
+    },
+    updateCheckDates(state, dates) {
+      state.checkDates = dates
     }
   },
   actions: {
-
+    async fetchFilter({ commit }) {
+      let res = await photoService.getFilters()
+      commit('updateFilter', {
+        albums: res.data.albums || [],
+        dates: res.data.dates || [],
+        cameras: res.data.cameras || [],
+        tags: res.data.tags || []
+      })
+    }
   },
   modules: {
     footer

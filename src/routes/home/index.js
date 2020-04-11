@@ -24,7 +24,7 @@ export default {
           meta: { title: '未整理', icon: 'el-icon-news', group: "筛选" }
         },
         {
-          path: 'date/:date',
+          path: 'date',
           name: 'photo-date',
           component: () => import(/* webpackChunkName: "home" */ './photo/date'),
           meta: { title: '拍摄日期', icon: 'el-icon-date' }

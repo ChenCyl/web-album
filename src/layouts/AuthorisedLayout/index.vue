@@ -32,27 +32,14 @@
                 <i :class="subRoute.meta.icon"></i>
                 <span>{{ subRoute.meta.title }}</span>
               </template>
-              <el-submenu v-for="node in Object.keys(dateTree)"
-                          :index="node"
-                          :key="node">
-                <template slot="title">
-                  <span>{{ node }}</span>
-                </template>
-                <el-submenu v-for="node2 in Object.keys(dateTree[node])"
-                            :index="node2"
-                            :key="node2">
-                  <template slot="title">
-                    <span>{{ node2 }}</span>
-                  </template>
-                  <el-menu-item v-for="node3 in dateTree[node][node2]"
-                                :index="`/photo/date/${node3.fullDate}`"
-                                :key="node3.fullDate">
-                    <template slot="title">
-                      <span>{{ node3.day }}</span>
-                    </template>
-                  </el-menu-item>
-                </el-submenu>
-              </el-submenu>
+              <el-menu-item index="/photo/date" class="photo-date-tree">
+                <el-tree
+                  :data="dateTree"
+                  node-key="fullDate"
+                  show-checkbox
+                  @check="handleDateCheck">
+                </el-tree>
+              </el-menu-item>
             </el-submenu>
             <!-- 其余侧边导航 -->
             <el-menu-item v-else :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
@@ -163,7 +150,7 @@
 
 <script>
 import theLogo from '@/components/the-logo'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -213,9 +200,10 @@ export default {
   computed: {
     ...mapState(['dateTree'])
   },
+  created() {
+    this.fetchFilter()
+  },
   mounted() {
-    console.log('routes', this.routes)
-
     this.$bus.$on('clickOption', (val) => {
       console.log('clickOption', val)
       this.allChecked = val.allChecked
@@ -226,6 +214,14 @@ export default {
     this.$bus.$off('clickOption')
   },
   methods: {
+    ...mapMutations(['updateCheckDates']),
+    ...mapActions(['fetchFilter']),
+    handleDateCheck(node, data) {
+      this.updateCheckDates(data.checkedKeys.filter(date => date))
+      if (this.$route.name !== 'photo-date') {
+        this.$router.push('/photo/date')
+      }
+    },
     handleCommand() {
 
     },
@@ -273,6 +269,14 @@ export default {
   height: 45px;
   width: 150px;
   margin: 10px auto;
+}
+
+.el-aside {
+  .photo-date-tree {
+      height: auto;
+      padding: 0 !important;
+      margin-left: 44px;
+  }
 }
 
 .el-header {
