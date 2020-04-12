@@ -33,7 +33,14 @@ export default {
           path: 'camera',
           name: 'photo-camera',
           component: () => import(/* webpackChunkName: "home" */ './photo/camera'),
-          meta: { title: '照相机', icon: 'el-icon-camera' }
+          meta: { title: '照相机', icon: 'el-icon-camera' },
+          children: [
+            {
+              path: 'photo',
+              name: 'photo-camera-photo',
+              component: () => import(/* webpackChunkName: "home" */ './photo/camera-photo')
+            }
+          ]
         },
         {
           path: 'rate',

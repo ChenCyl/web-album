@@ -1,7 +1,7 @@
 <template>
   <div class="photo-unpacked">
 
-    <head-title title="拍摄日期">
+    <head-title title="照相机">
       <template #button>
         <el-button type="primary">上传</el-button>
       </template>

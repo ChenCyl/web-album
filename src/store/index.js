@@ -68,7 +68,7 @@ export default new Vuex.Store({
   },
   actions: {
     async fetchFilter({ commit }) {
-      let res = await photoService.getFilters()
+      let res = await photoService.getFilter()
       commit('updateFilter', {
         albums: res.data.albums || [],
         dates: res.data.dates || [],

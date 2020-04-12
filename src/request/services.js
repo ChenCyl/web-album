@@ -12,10 +12,20 @@ export const photoService = {
     })
   },
 
-  getFilters() {
+  getFilter() {
     return request({
-      url: '/getFilters',
+      url: '/getFilter',
       method: 'get'
+    })
+  }
+}
+
+export const cameraService = {
+
+  getCameraList() {
+    return request({
+      url: '/getCameraList',
+      method: 'post'
     })
   }
 
