@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <head-title title="拍摄日期">
+    <head-title :title="albumName">
       <template #button>
         <el-button type="primary">上传</el-button>
       </template>
@@ -33,19 +33,19 @@ export default {
       pageSize: 20,
       loading: false,
       total: 0,
-      orderValue: 'ptime_etf'
+      orderValue: 'ptime_etf',
+      albumName: ''
     }
   },
   computed: {
-    ...mapState(['checkDates'])
-  },
-  watch: {
-    checkDates(val) {
-      this._getPhoto()
-    }
+    ...mapState(['albums'])
   },
   created() {
     this._getPhoto()
+    let id = this.$route.params.id
+
+    let album = this.albums.find(item => item.id === id)
+    albumName = album.name
   },
   methods: {
     handleOrderChange(val) {
@@ -66,11 +66,11 @@ export default {
         let res = await photoService.getPhotos({
           page: this.currentPage,
           size: this.pageSize,
-          albums: [],
-          dates: this.checkDates,
+          albums: ["no_album"],
+          dates: [],
           cameras: [],
-          rates: [],
-          tags: [],
+          rates: [0],
+          tags: ["no_tag"],
           order: this.orderValue
         })
         this.pageOptions = res.data.data
@@ -83,3 +83,4 @@ export default {
   }
 }
 </script>
+

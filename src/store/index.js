@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import footer from './modules/footer'
-import { photoService } from '@/request/services'
+import { photoService, albumService } from '@/request/services'
 
 Vue.use(Vuex)
 
@@ -10,10 +10,12 @@ export default new Vuex.Store({
   state: {
     filter: {
       dates: [],
-      tags: []
+      tags: [],
+      albums: []
     },
     dateTree: [],
-    checkDates: []
+    checkDates: [],
+    albums: []
   },
   mutations: {
     updateFilter(state, payload) {
@@ -64,6 +66,9 @@ export default new Vuex.Store({
     },
     updateCheckDates(state, dates) {
       state.checkDates = dates
+    },
+    updateAlbums(state, payload) {
+      state.albums = payload
     }
   },
   actions: {
@@ -75,6 +80,14 @@ export default new Vuex.Store({
         cameras: res.data.cameras || [],
         tags: res.data.tags || []
       })
+    },
+    async fetchAlbums({ commit }) {
+      let res = await albumService.getAlbums()
+      commit('updateAlbums', res.data)
+
+    },
+    async createAlbum({ commit }, data) {
+      await albumService.createAlbum(data)
     }
   },
   modules: {

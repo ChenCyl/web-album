@@ -1,13 +1,13 @@
 <template>
-  <div class="photo-unpacked">
-
+  <div>
     <head-title title="照相机">
       <template #button>
         <el-button type="primary">上传</el-button>
       </template>
     </head-title>
 
-    <table-content :pageOptions="pageOptions"
+    <table-content from="camera"
+                   :pageOptions="pageOptions"
                    :total="total"
                    :loading="loading"
                    @handleRowClick="handleRowClick"
@@ -43,7 +43,7 @@ export default {
     handleRowClick(val) {
       // this.camera = val
       this.$router.push({
-        path: '/photo/camera/photo',
+        name: 'photo-camera-photo',
         query: {
           id: val.id,
           name: val.name

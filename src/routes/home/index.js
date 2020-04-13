@@ -32,38 +32,36 @@ export default {
         {
           path: 'camera',
           name: 'photo-camera',
-          component: () => import(/* webpackChunkName: "home" */ './photo/camera'),
+          component: layouts.DefaultLayout,
           meta: { title: '照相机', icon: 'el-icon-camera' },
           children: [
+            {
+              path: '',
+              name: 'photo-camera-index',
+              component: () => import(/* webpackChunkName: "home" */ './photo/camera')
+            },
             {
               path: 'photo',
               name: 'photo-camera-photo',
               component: () => import(/* webpackChunkName: "home" */ './photo/camera-photo')
             }
           ]
-        },
-        {
-          path: 'rate',
-          name: 'photo-rate',
-          component: () => import(/* webpackChunkName: "home" */ './photo/rate'),
-          meta: { title: '等级', icon: 'el-icon-star-off' }
         }
       ]
     },
     {
-      path: 'album',
+      path: 'album/:id',
       name: 'album',
-      redirect: 'album/all',
-      component: layouts.DefaultLayout,
-      meta: { title: '相册', icon: 'el-icon-files' },
-      children: [
-        {
-          path: 'all',
-          name: 'album-all',
-          component: () => import(/* webpackChunkName: "home" */ './album/all'),
-          meta: { title: '所有相册', icon: 'el-icon-receiving' }
-        }
-      ]
+      component: () => import(/* webpackChunkName: "home" */ './album'),
+      meta: { title: '相册', icon: 'el-icon-files' }
+      // children: [
+      //   {
+      //     path: 'all',
+      //     name: 'album-all',
+      //     component: () => import(/* webpackChunkName: "home" */ './album/all'),
+      //     meta: { title: '所有相册', icon: 'el-icon-receiving' }
+      //   }
+      // ]
     }
   ]
 }

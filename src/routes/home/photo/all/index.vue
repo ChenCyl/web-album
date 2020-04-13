@@ -1,6 +1,5 @@
 <template>
-  <div class="photo-all">
-
+  <div>
     <head-title title="所有照片">
       <template #button>
         <el-button type="primary">上传</el-button>

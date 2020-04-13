@@ -26,29 +26,13 @@
         style="width: 100%"
         header-row-class-name="table-head"
         stripe>
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="照相机"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="num"
-          label="相片数量">
-        </el-table-column>
-        <el-table-column
-          prop="latest_ptitle"
-          label="最新上传"
-          show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column
-          prop="latest_date"
-          label="最新上传时间"
-          show-overflow-tooltip>
-        </el-table-column>
+        <template v-if="from === 'camera'">
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column prop="name" label="照相机" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="num" label="相片数量"></el-table-column>
+          <el-table-column prop="latest_ptitle" label="最新上传" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="latest_date" label="最新上传时间" show-overflow-tooltip></el-table-column>
+        </template>
       </el-table>
     </div>
     <!-- 分页 -->
@@ -72,7 +56,8 @@ export default {
   props: {
     total: Number,
     loading: Boolean,
-    pageOptions: Array // NOTE: 必须使用该命名
+    pageOptions: Array, // NOTE: 必须使用该命名
+    from: String
   },
   data() {
     return {

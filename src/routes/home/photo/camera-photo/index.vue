@@ -1,11 +1,15 @@
 <template>
-  <div class="photo-unpacked">
-
+  <div>
     <head-title title="照相机">
       <template #button>
         <el-button type="primary">上传</el-button>
       </template>
     </head-title>
+
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item :to="{ name: 'photo-camera-index' }">相机列表</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $route.query.name || ''}}</el-breadcrumb-item>
+    </el-breadcrumb>
 
     <main-content :pageOptions="pageOptions"
                   :total="total"
@@ -20,7 +24,6 @@
 <script>
 import MainContent from  "@/routes/home/components/main-content"
 import { photoService } from '@/request/services'
-import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -34,14 +37,6 @@ export default {
       loading: false,
       total: 0,
       orderValue: 'ptime_etf'
-    }
-  },
-  computed: {
-    ...mapState(['checkDates'])
-  },
-  watch: {
-    checkDates(val) {
-      this._getPhoto()
     }
   },
   created() {
@@ -67,8 +62,8 @@ export default {
           page: this.currentPage,
           size: this.pageSize,
           albums: [],
-          dates: this.checkDates,
-          cameras: [],
+          dates: [],
+          cameras: [this.$route.query.id],
           rates: [],
           tags: [],
           order: this.orderValue
@@ -83,3 +78,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.el-breadcrumb {
+  margin-bottom: 15px;
+  /deep/ .el-breadcrumb__inner.is-link {
+    font-weight: 400;
+  }
+}
+</style>

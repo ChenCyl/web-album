@@ -10,16 +10,17 @@
         <!-- @open="handleOpen"
           @close="handleClose"> -->
         <div class="logo-wrap"><the-logo /></div>
-        <el-submenu v-for="route in routes" :key="route.name" :index="route.name">
+        <!-- 相片 -->
+        <el-submenu index="photo-menu">
           <template slot="title">
-            <i :class="route.meta.icon"></i>
-            <span>{{ route.meta.title }}</span>
+            <i :class="routes[0].meta.icon"></i>
+            <span>{{ routes[0].meta.title }}</span>
           </template>
-          <template v-for="subRoute in route.children">
+          <template v-for="subRoute in routes[0].children">
             <!-- 未整理 -->
             <el-menu-item-group v-if="subRoute.meta.group" :key="subRoute.name">
               <template slot="title">{{subRoute.meta.group}}</template>
-              <el-menu-item :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
+              <el-menu-item :index="`/${routes[0].path}/${subRoute.path}`" :key="subRoute.name">
                 <template slot="title">
                   <i :class="subRoute.meta.icon"></i>
                   <span> {{ subRoute.meta.title }}</span>
@@ -41,8 +42,8 @@
                 </el-tree>
               </el-menu-item>
             </el-submenu>
-            <!-- 其余侧边导航 -->
-            <el-menu-item v-else :index="`/${route.path}/${subRoute.path}`" :key="subRoute.name">
+            <!-- 其余 -->
+            <el-menu-item v-else :index="`/${routes[0].path}/${subRoute.path}`" :key="subRoute.name">
               <template slot="title">
                 <i :class="subRoute.meta.icon"></i>
                 <span> {{ subRoute.meta.title }}</span>
@@ -50,6 +51,46 @@
             </el-menu-item>
           </template>
         </el-submenu>
+        <!-- 相册 -->
+        <el-submenu index="album-menu">
+          <template slot="title">
+            <i :class="routes[1].meta.icon"></i>
+            <span>{{ routes[1].meta.title }}</span>
+            <el-popover placement="right"
+                        width="260"
+                        v-model="albumPopVisible">
+              <el-form :model="albumForm" ref="albumForm" class="album-form">
+                <el-form-item prop="name"
+                              :rules="[{ required: true, message: '请输入相册名称', trigger: 'blur' },
+                                       { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }]">
+                  <el-input v-model.trim="albumForm.name"
+                            placeholder="请输入相册名称"
+                            size="small"
+                            show-word-limit>
+                  </el-input>
+                </el-form-item>
+                <el-form-item>
+                  <div style="text-align: right;">
+                    <el-button size="mini" type="text" @click="albumPopVisible = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="createAlbumRequest">确定</el-button>
+                  </div>
+                </el-form-item>
+              </el-form>
+              <i slot="reference"
+                 class="el-icon-circle-plus-outline text-btn"
+                 @click.stop
+                 title="新增相册"
+                 style="margin-left: 60px; font-size: 16px">
+              </i>
+            </el-popover>
+          </template>
+          <el-menu-item v-for="item in albums"
+                        :index="`/album/${item.id}`"
+                        :key="item.id">
+            {{`${item.name} (${item.num})`}}
+          </el-menu-item>
+        </el-submenu>
+
       </el-menu>
     </el-aside>
 
@@ -164,44 +205,24 @@ export default {
       allChecked: false,
       footerVisible: false,
       albumDialogVisible: false,
-      albums: [{
-        id: 'sdffdsfa',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森动物之森动物之森动物之森'
-      },{
-        id: 'sdffdsfa1',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森'
-      },{
-        id: 'sdffdsfa2',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森'
-      },{
-        id: 'sdffdsfa3',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森'
-      },{
-        id: 'sdffdsfa24',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森'
-      },{
-        id: 'sdffdsfa25',
-        src: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        name: '动物之森'
-      }],
       radio: '',
       ratePopVisible: false,
       rateValue: null,
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       rateDialogVisible: false,
-      tagDialogVisible: false
+      tagDialogVisible: false,
+      albumPopVisible: false,
+      albumForm: {
+        name: ''
+      }
     }
   },
   computed: {
-    ...mapState(['dateTree'])
+    ...mapState(['dateTree', 'albums'])
   },
   created() {
     this.fetchFilter()
+    this.fetchAlbums()
   },
   mounted() {
     this.$bus.$on('clickOption', (val) => {
@@ -215,7 +236,7 @@ export default {
   },
   methods: {
     ...mapMutations(['updateCheckDates']),
-    ...mapActions(['fetchFilter']),
+    ...mapActions(['fetchFilter', 'fetchAlbums', 'createAlbum']),
     handleDateCheck(node, data) {
       this.updateCheckDates(data.checkedKeys.filter(date => date))
       if (this.$route.name !== 'photo-date') {
@@ -241,6 +262,20 @@ export default {
     },
     addTag() {
       this.tagDialogVisible = true
+    },
+
+    // 新增相册
+    createAlbumRequest() {
+      this.$refs.albumForm.validateField('name', async success => {
+        if (!success) {
+          await this.createAlbum({
+            name: this.albumForm.name
+          })
+          this.$message.success('添加成功')
+          this.albumPopVisible = false
+          this.fetchAlbums()
+        }
+      })
     }
   }
 }
@@ -344,6 +379,12 @@ export default {
   }
   /deep/ .el-rate__text {
     font-size: 20px;
+  }
+}
+
+.album-form {
+  .el-form-item {
+    margin-bottom: 0;;
   }
 }
 </style>

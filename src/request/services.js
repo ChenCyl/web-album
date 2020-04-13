@@ -31,3 +31,21 @@ export const cameraService = {
 
 }
 
+export const albumService = {
+
+  createAlbum(data) {
+    return request({
+      url: '/createAlbum',
+      method: 'post',
+      data
+    })
+  },
+
+  getAlbums() {
+    return request({
+      url: '/getAlbums',
+      method: 'get'
+    })
+  }
+}
+

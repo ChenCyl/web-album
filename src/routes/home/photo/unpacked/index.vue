@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-unpacked">
+  <div>
 
     <head-title title="未整理" intro="无所属相册、无等级、无标签的照片">
       <template #button>
