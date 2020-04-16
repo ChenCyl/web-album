@@ -10,10 +10,12 @@ import macro from '@/core/data/macro'
 
 import HeadTitle from '@/components/head-title'
 import DetailDrawer from '@/components/detail-drawer'
+import OpDialog from '@/components/op-dialog'
 
 // 全局组件
 Vue.component('head-title', HeadTitle)
 Vue.prototype.$detail = DetailDrawer
+Vue.prototype.$dialog = OpDialog
 
 // 外部组件库
 Vue.use(ElementUI)

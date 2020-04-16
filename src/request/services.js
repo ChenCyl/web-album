@@ -33,9 +33,9 @@ export const cameraService = {
 
 export const albumService = {
 
-  createAlbum(data) {
+  saveAlbum(data) {
     return request({
-      url: '/createAlbum',
+      url: '/saveAlbum',
       method: 'post',
       data
     })
@@ -45,6 +45,14 @@ export const albumService = {
     return request({
       url: '/getAlbums',
       method: 'get'
+    })
+  },
+
+  deleteAlbum(data) {
+    return request({
+      url: '/deleteAlbum',
+      method: 'post',
+      data
     })
   }
 }

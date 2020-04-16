@@ -1,16 +1,16 @@
 <template>
   <el-container>
+    <!-- 侧边栏 -->
     <el-aside width="auto">
       <el-menu
         router
-        default-active="/photo/all"
-        :default-openeds="['/photo', '/album']"
-        class="el-menu-vertical-demo"
+        :default-active="defaultActive"
+        :default-openeds="['photo-menu', 'album-menu']"
         :collapse="isCollapse">
         <!-- @open="handleOpen"
           @close="handleClose"> -->
         <div class="logo-wrap"><the-logo /></div>
-        <!-- 相片 -->
+        <!-- 相片菜单 -->
         <el-submenu index="photo-menu">
           <template slot="title">
             <i :class="routes[0].meta.icon"></i>
@@ -51,7 +51,7 @@
             </el-menu-item>
           </template>
         </el-submenu>
-        <!-- 相册 -->
+        <!-- 相册菜单 -->
         <el-submenu index="album-menu">
           <template slot="title">
             <i :class="routes[1].meta.icon"></i>
@@ -72,7 +72,7 @@
                 <el-form-item>
                   <div style="text-align: right;">
                     <el-button size="mini" type="text" @click="albumPopVisible = false">取消</el-button>
-                    <el-button type="primary" size="mini" @click="createAlbumRequest">确定</el-button>
+                    <el-button type="primary" size="mini" @click="saveAlbumRequest">确定</el-button>
                   </div>
                 </el-form-item>
               </el-form>
@@ -95,6 +95,7 @@
     </el-aside>
 
     <el-container>
+      <!-- 顶栏 -->
       <el-header>
         <div class="collapse-btn" @click="isCollapse = !isCollapse">
           <i :class="isCollapse? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
@@ -115,11 +116,11 @@
           </el-dropdown>
         </div>
       </el-header>
-
+      <!-- 主要内容 -->
       <el-main>
         <router-view></router-view>
       </el-main>
-
+      <!-- 底部操作 -->
       <transition name="collapse-ttb">
         <el-footer v-if="footerVisible">
           <el-checkbox v-model="allChecked" @change="handleCheckAllChange">全选</el-checkbox>
@@ -136,62 +137,13 @@
       </transition>
     </el-container>
 
-    <el-dialog
-      title="请选择相册"
-      :visible.sync="albumDialogVisible"
-      width="30%"
-      :before-close="handleClose"
-      class="album-dialog">
-      <el-radio-group v-model="radio">
-        <el-radio v-for="album in albums" :key="album.id" :label="album.id">
-          <el-image style="width: 50px; height: 50px"
-                    :src="album.src"
-                    fit="cover"></el-image>
-          <div class="name single-ellipsis" :title="album.name">{{ album.name }}</div>
-        </el-radio>
-      </el-radio-group>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="albumDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="albumDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
-      title="请评分"
-      :visible.sync="rateDialogVisible"
-      width="30%"
-      :before-close="handleClose"
-      class="rate-dialog">
-      <el-rate
-        v-model="rateValue"
-        text-color="#ff9900"
-        show-score>
-      </el-rate>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="rateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="rateDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
-      title="请添加标签"
-      :visible.sync="tagDialogVisible"
-      width="30%"
-      :before-close="handleClose"
-      class="tag-dialog">
-      <!-- TODO: 接口mock了 -->
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="tagDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="tagDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
   </el-container>
 </template>
 
 <script>
 import theLogo from '@/components/the-logo'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { albumService } from '@/request/services'
 
 export default {
   components: {
@@ -204,21 +156,23 @@ export default {
       searchKey: '',
       allChecked: false,
       footerVisible: false,
-      albumDialogVisible: false,
-      radio: '',
-      ratePopVisible: false,
-      rateValue: null,
-      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      rateDialogVisible: false,
-      tagDialogVisible: false,
       albumPopVisible: false,
       albumForm: {
         name: ''
-      }
+      },
+      defaultActive: ''
     }
   },
   computed: {
     ...mapState(['dateTree', 'albums'])
+  },
+  watch: {
+    $route: {
+      handler(val) {
+        this.defaultActive = val.path
+      },
+      immediate: true
+    }
   },
   created() {
     this.fetchFilter()
@@ -236,7 +190,7 @@ export default {
   },
   methods: {
     ...mapMutations(['updateCheckDates']),
-    ...mapActions(['fetchFilter', 'fetchAlbums', 'createAlbum']),
+    ...mapActions(['fetchFilter', 'fetchAlbums']),
     handleDateCheck(node, data) {
       this.updateCheckDates(data.checkedKeys.filter(date => date))
       if (this.$route.name !== 'photo-date') {
@@ -251,24 +205,23 @@ export default {
     handleCheckAllChange(val) {
       this.$bus.$emit('clickAll', val)
     },
-    addToAblum() {
-      this.albumDialogVisible = true
-    },
     handleClose(done) {
       done()
     },
+    addToAblum() {
+      this.$dialog('album')
+    },
     addRate() {
-      this.rateDialogVisible = true
+      this.$dialog('rate')
     },
     addTag() {
-      this.tagDialogVisible = true
+      this.$dialog('tag')
     },
-
     // 新增相册
-    createAlbumRequest() {
+    saveAlbumRequest() {
       this.$refs.albumForm.validateField('name', async success => {
         if (!success) {
-          await this.createAlbum({
+          await albumService.saveAlbum({
             name: this.albumForm.name
           })
           this.$message.success('添加成功')
@@ -350,35 +303,6 @@ export default {
       margin-left: 20px;
     }
 
-  }
-}
-
-.album-dialog {
-  .el-radio-group {
-    max-height: 360px;
-    overflow: auto;
-  }
-  .el-radio {
-    display: block;
-    margin-bottom: 20px;
-    .el-image {
-      vertical-align: middle;
-      margin-left: 10px;
-    }
-    .name {
-      display: inline-block;
-      margin-left: 20px;
-      max-width: 160px;
-    }
-  }
-}
-
-.rate-dialog {
-  /deep/ .el-rate__icon {
-    font-size: 26px;
-  }
-  /deep/ .el-rate__text {
-    font-size: 20px;
   }
 }
 

@@ -6,6 +6,8 @@ import { photoService, albumService } from '@/request/services'
 
 Vue.use(Vuex)
 
+// p.s. store 中只存储获取的方法（即会改变 state 的）
+
 export default new Vuex.Store({
   state: {
     filter: {
@@ -72,6 +74,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // 获取所有照片中选择器的选项数据
     async fetchFilter({ commit }) {
       let res = await photoService.getFilter()
       commit('updateFilter', {
@@ -81,13 +84,11 @@ export default new Vuex.Store({
         tags: res.data.tags || []
       })
     },
+    // 获取所有相册 用于侧边栏
     async fetchAlbums({ commit }) {
       let res = await albumService.getAlbums()
       commit('updateAlbums', res.data)
 
-    },
-    async createAlbum({ commit }, data) {
-      await albumService.createAlbum(data)
     }
   },
   modules: {

@@ -17,6 +17,13 @@
   white-space: nowrap;
 }
 
+// inline-block 垂直居中
+.va-m {
+  > * {
+    vertical-align: middle;
+  }
+}
+
 
 // // 块元素水平居中
 // .center-h {
@@ -80,6 +87,13 @@
 .highlight {
   font-size: 14px;
   color: $color-warning;
+}
+
+.ib {
+  display: inline-block;
+  > * {
+    display: inline-block;
+  }
 }
 
 

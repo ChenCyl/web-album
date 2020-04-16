@@ -1,7 +1,8 @@
 import Vue from 'vue'
-import DetailDrawer from './DetailDrawer.vue'
+import OpDialog from './OpDialog.vue'
+import store from '@/store'
 
-let MessageConstructor = Vue.extend(DetailDrawer)
+let MessageConstructor = Vue.extend(OpDialog)
 
 let instance
 let instances = []
@@ -23,7 +24,8 @@ const Message = function(options) {
     Message.close(id, userOnClose)
   }
   instance = new MessageConstructor({
-    data: options
+    data: options,
+    store // NOTE: important!
   })
   instance.id = id
   // if (isVNode(instance.message)) {
@@ -37,7 +39,7 @@ const Message = function(options) {
   //   verticalOffset += item.$el.offsetHeight + 16;
   // });
   // instance.verticalOffset = verticalOffset;
-  instance.visible = true // TODO: 组件中的命名不可变
+  instance.visible = true // NOTE: Do not change name!
   // instance.$el.style.zIndex = PopupManager.nextZIndex();
   instances.push(instance)
   return instance
