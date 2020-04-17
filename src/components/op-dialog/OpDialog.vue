@@ -8,7 +8,8 @@ export default {
   components: {
     album: () => import('./sub-comps/AlbumDialog'),
     rate: () => import('./sub-comps/RateDialog'),
-    tag: () => import('./sub-comps/tagDialog')
+    tag: () => import('./sub-comps/tagDialog'),
+    share: () => import('./sub-comps/ShareDialog')
   },
   data() {
     return {

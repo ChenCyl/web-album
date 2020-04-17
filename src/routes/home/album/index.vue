@@ -67,11 +67,13 @@
 import MainContent from  "@/routes/home/components/main-content"
 import { photoService, albumService } from '@/request/services'
 import { mapState, mapActions } from 'vuex'
+import flashMixin from '@/core/mixins/flashMixin'
 
 export default {
   components: {
     MainContent
   },
+  mixins: [ flashMixin ],
   data() {
     return {
       pageOptions: [],

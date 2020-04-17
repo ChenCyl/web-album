@@ -13,11 +13,13 @@ export default new Vuex.Store({
     filter: {
       dates: [],
       tags: [],
-      albums: []
+      albums: [],
+      cameras: []
     },
     dateTree: [],
     checkDates: [],
-    albums: []
+    albums: [],
+    checkedOptionsCopy: []
   },
   mutations: {
     updateFilter(state, payload) {
@@ -71,6 +73,9 @@ export default new Vuex.Store({
     },
     updateAlbums(state, payload) {
       state.albums = payload
+    },
+    updateCheckedOptionsCopy(state, options) {
+      state.checkedOptionsCopy = options
     }
   },
   actions: {
@@ -88,7 +93,6 @@ export default new Vuex.Store({
     async fetchAlbums({ commit }) {
       let res = await albumService.getAlbums()
       commit('updateAlbums', res.data)
-
     }
   },
   modules: {

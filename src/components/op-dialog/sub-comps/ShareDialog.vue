@@ -5,14 +5,26 @@
     width="350px"
     :before-close="handleClose"
     class="rate-dialog">
-    <el-rate
-      v-model="rateValue"
-      text-color="#ff9900"
-      show-score>
-    </el-rate>
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="分享主题">
+        <el-input v-model="form.title"></el-input>
+      </el-form-item>
+      <el-form-item label="介绍">
+        <el-input type="textarea" v-model="form.desc"></el-input>
+      </el-form-item>
+      <el-form-item label="分享设置">
+        <el-checkbox-group v-model="form.type">
+          <!-- TODO: 。。。 -->
+          <el-checkbox label="美食/餐厅线上活动" name="type">是否分享文件信息</el-checkbox>
+          <el-checkbox label="地推活动" name="type">是否分享相机信息</el-checkbox>
+          <el-checkbox label="线下主题活动" name="type">是否分享拍摄数据</el-checkbox>
+          <el-checkbox label="单纯品牌曝光" name="type">是否分享位置信息</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dVisible = false">取 消</el-button>
-      <el-button type="primary" @click="addRateRequest">确 定</el-button>
+      <el-button type="primary" @click="shareRequest">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -30,7 +42,9 @@ export default {
   },
   data() {
     return {
-      rateValue: 0
+      form: {
+
+      }
     }
   },
   computed: {
@@ -62,12 +76,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rate-dialog {
-  /deep/ .el-rate__icon {
-    font-size: 26px;
-  }
-  /deep/ .el-rate__text {
-    font-size: 20px;
-  }
-}
+
+
 </style>

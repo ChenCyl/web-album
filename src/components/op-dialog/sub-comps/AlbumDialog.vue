@@ -1,16 +1,12 @@
 <template>
-  <!-- TODO: 筛选加新建 -->
   <el-dialog
     title="请选择相册"
     :visible.sync="dVisible"
     width="350px"
     :before-close="handleClose"
     class="album-dialog">
-    <el-radio-group v-model="radio">
+    <el-radio-group v-model="albumValue">
       <el-radio v-for="album in albums" :key="album.id" :label="album.id">
-        <!-- <el-image style="width: 50px; height: 50px"
-                  :src="album.src"
-                  fit="cover"></el-image> -->
         <div class="ib va-m">
           <div class="name single-ellipsis" :title="album.name">{{ album.name }}</div>
           <div>{{`(${album.num})`}}</div>
@@ -19,13 +15,15 @@
     </el-radio-group>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dVisible = false">确 定</el-button>
+      <el-button type="primary" @click="addToAlbumRequest">确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { photoService } from '@/request/services'
+
 export default {
   props: {
     visible: {
@@ -35,11 +33,11 @@ export default {
   },
   data() {
     return {
-      radio: ''
+      albumValue: ''
     }
   },
   computed: {
-    ...mapState(['albums']),
+    ...mapState(['albums', 'checkedOptionsCopy']),
     dVisible: {
       set(val) {
         this.$emit('update:visible', val)
@@ -54,6 +52,20 @@ export default {
   methods: {
     handleClose(done) {
       done()
+    },
+    async addToAlbumRequest() {
+      if (this.albumValue) {
+        console.log('copyOptions', this.checkedOptionsCopy)
+        await photoService.addToAlbum({
+          album: this.albumValue,
+          photos: this.checkedOptionsCopy || []
+        })
+        this.$message.success('添加成功')
+        this.dVisible = false
+        this.$bus.$emit('flashContent')
+      } else {
+        this.$message.warning('请选择相册')
+      }
     }
   }
 }

@@ -17,6 +17,22 @@ export const photoService = {
       url: '/getFilter',
       method: 'get'
     })
+  },
+
+  addToAlbum(data) {
+    return request({
+      url: '/addToAlbum',
+      method: 'post',
+      data
+    })
+  },
+
+  addRate(data) {
+    return request({
+      url: '/setRate',
+      method: 'post',
+      data
+    })
   }
 }
 
@@ -55,5 +71,25 @@ export const albumService = {
       data
     })
   }
+}
+
+export const tagService = {
+
+  createTag(data) {
+    return request({
+      url: '/createTag',
+      method: 'post',
+      data
+    })
+  },
+
+  setTags(data) {
+    return request({
+      url: '/setTags',
+      method: 'post',
+      data
+    })
+  }
+
 }
 

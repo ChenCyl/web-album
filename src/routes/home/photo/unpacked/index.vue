@@ -20,11 +20,13 @@
 <script>
 import MainContent from  "@/routes/home/components/main-content"
 import { photoService } from '@/request/services'
+import flashMixin from '@/core/mixins/flashMixin'
 
 export default {
   components: {
     MainContent
   },
+  mixins: [ flashMixin ],
   data() {
     return {
       pageOptions: [],
