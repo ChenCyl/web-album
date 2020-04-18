@@ -1,11 +1,7 @@
 <template>
   <div>
 
-    <head-title title="拍摄日期">
-      <template #button>
-        <el-button type="primary">上传</el-button>
-      </template>
-    </head-title>
+    <head-title title="拍摄日期" />
 
     <main-content :pageOptions="pageOptions"
                   :total="total"
@@ -21,11 +17,13 @@
 import MainContent from  "@/routes/home/components/main-content"
 import { photoService } from '@/request/services'
 import { mapState } from 'vuex'
+import flashMixin from '@/core/mixins/flashMixin'
 
 export default {
   components: {
     MainContent
   },
+  mixins: [ flashMixin ],
   data() {
     return {
       pageOptions: [],

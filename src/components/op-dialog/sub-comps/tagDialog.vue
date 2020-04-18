@@ -91,7 +91,7 @@ export default {
     async setTagsRequest() {
       if (this.tagValue.length) {
         await tagService.setTags({
-          photos: this.checkedOptionsCopy || [],
+          photos: this.checkedOptionsCopy.map(item => item.id),
           tags: this.tagValue
         })
         this.$message.success('添加成功')

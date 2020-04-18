@@ -35,9 +35,9 @@
              :key="option.id"
              :class="{
                'photo-wrap': true,
-               'photo-checked': checkedOptions.indexOf(option.id) > -1}">
+               'photo-checked': checkedOptions.findIndex(item => item.id === option.id) > -1}">
           <div class="op-wrap">
-            <el-checkbox :label="option.id"></el-checkbox>
+            <el-checkbox :label="option"></el-checkbox>
             <div>
               <i class="text-btn el-icon-view" @click="viewDetail(option.id)" title="查看详细参数"></i>
               <el-dropdown trigger="click">

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <head-title title="照相机">
-      <template #button>
-        <el-button type="primary">上传</el-button>
-      </template>
-    </head-title>
+    <head-title title="照相机" />
 
     <table-content from="camera"
                    :pageOptions="pageOptions"

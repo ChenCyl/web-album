@@ -1,9 +1,6 @@
 <template>
   <div>
     <head-title title="所有照片">
-      <template #button>
-        <el-button type="primary">上传</el-button>
-      </template>
       <template #selector>
         <photo-selectors @change="handleSelectorsChange" />
       </template>
@@ -23,12 +20,14 @@
 import PhotoSelectors from '@/routes/home/components/photo-selectors'
 import MainContent from  "@/routes/home/components/main-content"
 import { photoService } from '@/request/services'
+import flashMixin from '@/core/mixins/flashMixin'
 
 export default {
   components: {
     PhotoSelectors,
     MainContent
   },
+  mixins: [ flashMixin ],
   data() {
     return {
       pageOptions: [],

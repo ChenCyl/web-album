@@ -50,7 +50,7 @@ export default {
     },
     async addRateRequest() {
       await photoService.addRate({
-        photos: this.checkedOptionsCopy,
+        photos: this.checkedOptionsCopy.map(item => item.id),
         rate: this.rateValue
       })
       this.$message.success('添加成功')

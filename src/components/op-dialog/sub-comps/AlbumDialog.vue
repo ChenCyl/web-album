@@ -58,7 +58,7 @@ export default {
         console.log('copyOptions', this.checkedOptionsCopy)
         await photoService.addToAlbum({
           album: this.albumValue,
-          photos: this.checkedOptionsCopy || []
+          photos: this.checkedOptionsCopy.map(item => item.id)
         })
         this.$message.success('添加成功')
         this.dVisible = false

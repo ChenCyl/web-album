@@ -130,8 +130,8 @@
             <el-button type="text" @click="addTag" icon="el-icon-price-tag">添加标签</el-button>
             <el-button type="text" @click="playCarousel" icon="el-icon-data-board">幻灯片</el-button>
             <el-button type="text" @click="share" icon="el-icon-share">分享</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-download">下载</el-button>
-            <el-button type="text" @click="addToAblum" icon="el-icon-close">删除</el-button>
+            <el-button type="text" @click="download" icon="el-icon-download">下载</el-button>
+            <el-button type="text" @click="deletePhotos" icon="el-icon-close">删除</el-button>
           </div>
         </el-footer>
       </transition>
@@ -218,10 +218,16 @@ export default {
       this.$dialog('tag')
     },
     playCarousel() {
-      console.log("播放幻灯片")
+      this.$dialog('carousel')
     },
     share() {
       this.$dialog('share')
+    },
+    download() {
+      this.$dialog('download')
+    },
+    deletePhotos() {
+      this.$dialog('delete')
     },
     // 新增相册
     saveAlbumRequest() {

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import footer from './modules/footer'
+import share from './modules/share'
 import { photoService, albumService } from '@/request/services'
 
 Vue.use(Vuex)
@@ -19,7 +19,8 @@ export default new Vuex.Store({
     dateTree: [],
     checkDates: [],
     albums: [],
-    checkedOptionsCopy: []
+    checkedOptionsCopy: [],
+    uploadCdt: {} // 上传条件
   },
   mutations: {
     updateFilter(state, payload) {
@@ -76,6 +77,9 @@ export default new Vuex.Store({
     },
     updateCheckedOptionsCopy(state, options) {
       state.checkedOptionsCopy = options
+    },
+    updateUploadCdt(state, payload) {
+      state.uploadCdt = payload
     }
   },
   actions: {
@@ -96,6 +100,6 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    footer
+    share
   }
 })

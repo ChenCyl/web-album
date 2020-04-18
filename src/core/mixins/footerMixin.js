@@ -20,7 +20,7 @@ export default {
     this.$bus.$on('clickAll', val => {
       console.log('clickAll', val)
       if (val) {
-        this.checkedOptions = this.pageOptions.map(item => item.id)
+        this.checkedOptions = this.pageOptions
       }
       else {
         this.checkedOptions = []

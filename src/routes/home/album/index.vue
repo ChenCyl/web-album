@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <head-title :title="albumName">
+    <head-title :title="albumName" :albumId="albumId">
       <template #op>
         <el-popover placement="bottom"
                     width="260"
@@ -47,9 +47,6 @@
             circle
             plain />
         </el-popover>
-      </template>
-      <template #button>
-        <el-button type="primary">上传</el-button>
       </template>
     </head-title>
 

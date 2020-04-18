@@ -1,11 +1,7 @@
 <template>
   <div>
 
-    <head-title title="未整理" intro="无所属相册、无等级、无标签的照片">
-      <template #button>
-        <el-button type="primary">上传</el-button>
-      </template>
-    </head-title>
+    <head-title title="未整理" intro="无所属相册、无等级、无标签的照片" />
 
     <main-content :pageOptions="pageOptions"
                   :total="total"

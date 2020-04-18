@@ -15,8 +15,8 @@
       </div>
     </div>
     <!-- 上传按钮 -->
-    <div v-if="$slots.button" class="button-wrap">
-      <slot name="button"></slot>
+    <div class="button-wrap">
+      <el-button type="primary" @click="uploadPhotos">{{ albumId ? '上传至该相册' : '上传'}}</el-button>
     </div>
     <!-- 选择器 -->
     <el-divider v-if="$slots.selector"></el-divider>
@@ -27,10 +27,22 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   props: {
     title: String,
-    intro: String
+    intro: String,
+    albumId: String
+  },
+  methods: {
+    ...mapMutations(['updateUploadCdt']),
+    uploadPhotos() {
+      this.updateUploadCdt({
+        album: this.albumId || ''
+      })
+      this.$dialog('upload')
+    }
   }
 }
 </script>

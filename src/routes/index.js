@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import layouts from '../layouts'
 import login from './login'
 import home from './home'
+import share from './share'
 import Page404 from './404/index.vue'
 
 Vue.use(VueRouter)
@@ -13,7 +14,8 @@ const routes = [
     component: layouts.DefaultLayout,
     children: [
       home,
-      login
+      login,
+      share
     ]
   },
   {

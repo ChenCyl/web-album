@@ -33,6 +33,14 @@ export const photoService = {
       method: 'post',
       data
     })
+  },
+
+  deletePhotos(data) {
+    return request({
+      url: '/deletePhotos',
+      method: 'post',
+      data
+    })
   }
 }
 
