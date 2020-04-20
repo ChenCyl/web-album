@@ -21,10 +21,6 @@
     <el-dialog :visible.sync="viewerVisible">
       <img width="100%" :src="viewerImageUrl" alt="">
     </el-dialog>
-    <!-- <span slot="footer" class="dialog-footer">
-      <el-button @click="dVisible = false">取 消</el-button>
-      <el-button type="primary" @click="addToAlbumRequest">确 定</el-button>
-    </span> -->
   </el-dialog>
 </template>
 

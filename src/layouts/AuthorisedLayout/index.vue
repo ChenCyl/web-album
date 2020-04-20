@@ -198,7 +198,7 @@ export default {
       }
     },
     handleCommand() {
-
+      this.$router.push('/manage/share')
     },
     // 点击全选事件 -> 子组件数据改变
     // 子组件数据改变 -> 全选值改变

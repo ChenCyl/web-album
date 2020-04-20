@@ -37,7 +37,7 @@ const Message = function(options) {
   //   verticalOffset += item.$el.offsetHeight + 16;
   // });
   // instance.verticalOffset = verticalOffset;
-  instance.visible = true // TODO: 组件中的命名不可变
+  instance.visible = true // NOTE: 组件中的命名不可变
   // instance.$el.style.zIndex = PopupManager.nextZIndex();
   instances.push(instance)
   return instance

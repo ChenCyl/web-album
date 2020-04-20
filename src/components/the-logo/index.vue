@@ -1,5 +1,5 @@
 <template>
-  <div class="logo"></div>
+  <div class="logo" @click="$router.push('/photo')"></div>
 </template>
 
 <script>
@@ -15,5 +15,6 @@ export default {
   background-image: url(../../assets/logo.png);
   background-size: contain;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 </style>

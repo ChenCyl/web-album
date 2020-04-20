@@ -63,7 +63,7 @@
             <!-- FIXME: sImgUrl => lImgUrl -->
           </div>
           <div class="title-wrap typo-base">
-            <div class="title single-ellipsis" title="nia">{{option.title}}</div>
+            <div class="title single-ellipsis" title="nia">{{option.name}}</div>
             <div class="format">.{{option.format}}</div>
           </div>
         </div>

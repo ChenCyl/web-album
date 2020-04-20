@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     this.checkedOptionsCopy.forEach(item => {
-      this.downloadIamge(item.lImgUrl, item.title)
+      this.downloadIamge(item.lImgUrl, item.name)
     })
   },
   methods: {
