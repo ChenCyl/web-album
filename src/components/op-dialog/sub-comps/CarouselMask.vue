@@ -4,7 +4,7 @@
       <el-carousel-item v-for="item in checkedOptionsCopy" :key="item.id">
         <el-image
           style="width: 100%; height: 100%"
-          :src="item.lImgUrl"
+          :src="item.fileUrlPath"
           fit="contain"></el-image>
       </el-carousel-item>
     </el-carousel>
@@ -13,28 +13,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import dialogMixin from '@/core/mixins/dialogMixin'
+
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
 
     }
   },
   computed: {
-    ...mapState(['checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['checkedOptionsCopy'])
   },
   mounted() {
     document.getElementById('carousel-mask').requestFullscreen()

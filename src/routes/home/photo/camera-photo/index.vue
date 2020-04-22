@@ -12,7 +12,8 @@
                   :loading="loading"
                   @handleOrderChange="handleOrderChange"
                   @handleSizeChange="handleSizeChange"
-                  @handleCurrentChange="handleCurrentChange"></main-content>
+                  @handleCurrentChange="handleCurrentChange"
+                  @handleKeywordChange="handleKeywordChange"></main-content>
 
   </div>
 </template>
@@ -34,13 +35,18 @@ export default {
       pageSize: 20,
       loading: false,
       total: 0,
-      orderValue: 'ptime_etf'
+      orderValue: 'ptime_etf',
+      searchKey: ''
     }
   },
   created() {
     this._getPhoto()
   },
   methods: {
+    handleKeywordChange(keyword) {
+      this.searchKey = keyword
+      this._getPhoto()
+    },
     handleOrderChange(val) {
       this.orderValue = val
       this._getPhoto()
@@ -64,10 +70,11 @@ export default {
           cameras: [this.$route.query.id],
           rates: [],
           tags: [],
-          order: this.orderValue
+          order: this.orderValue,
+          keyword: this.searchKey
         })
-        this.pageOptions = res.data.data
-        this.total = res.data.total
+        this.pageOptions = res.data.data.data
+        this.total = res.data.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

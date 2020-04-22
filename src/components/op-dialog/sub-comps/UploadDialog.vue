@@ -27,14 +27,10 @@
 <script>
 import { mapState } from 'vuex'
 import { photoService } from '@/request/services'
+import dialogMixin from '@/core/mixins/dialogMixin'
 
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
       fileList: [],
@@ -43,15 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['albums', 'checkedOptionsCopy', 'uploadCdt']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['albums', 'checkedOptionsCopy', 'uploadCdt'])
   },
   created() {
   },
@@ -80,8 +68,8 @@ export default {
       if (this.albumValue) {
         console.log('copyOptions', this.checkedOptionsCopy)
         await photoService.addToAlbum({
-          album: this.albumValue,
-          photos: this.checkedOptionsCopy.map(item => item.id)
+          albumId: this.albumValue,
+          photoIds: this.checkedOptionsCopy.map(item => item.photoId)
         })
         this.$message.success('添加成功')
         this.dVisible = false

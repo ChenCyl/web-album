@@ -31,9 +31,12 @@
             <el-table-column prop="intro" label="介绍" show-overflow-tooltip></el-table-column>
             <el-table-column label="链接">
               <template slot-scope="{ row }">
-                <span class="text-btn">{{`https://localhost:8080/share/${row.uuid}`}}</span>
+                <span class="text-btn" @click="copyLink(row.uuid)">{{`https://localhost:8080/share/${row.uuid}`}}</span>
               </template>
             </el-table-column>
+            <!-- TODO: -->
+            <el-table-column prop="expire" label="照片数量"></el-table-column>
+
             <el-table-column prop="expire" label="有效期至"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
@@ -55,6 +58,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { copy2Clip } from '@/utils/copy2Clip'
 
 export default {
   props: {
@@ -72,7 +76,11 @@ export default {
     this.shareData = Object.values(this.share)
   },
   methods: {
-
+    copyLink(text) {
+      copy2Clip(text, () => {
+        this.$message.success('成功复制到剪切板')
+      })
+    }
   }
 }
 </script>

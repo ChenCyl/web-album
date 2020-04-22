@@ -234,7 +234,7 @@ export default {
       this.$refs.albumForm.validateField('name', async success => {
         if (!success) {
           await albumService.saveAlbum({
-            name: this.albumForm.name
+            albumName: this.albumForm.name
           })
           this.$message.success('添加成功')
           this.albumPopVisible = false

@@ -7,29 +7,17 @@
 <script>
 import { mapState } from 'vuex'
 import { photoService } from '@/request/services'
+import dialogMixin from '@/core/mixins/dialogMixin'
 
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
       fullscreenLoading: false
     }
   },
   computed: {
-    ...mapState(['checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['checkedOptionsCopy'])
   },
   async mounted() {
     this.$confirm('此操作将永久删除照片, 是否继续?', '提示', {
@@ -44,7 +32,7 @@ export default {
     async deletePhotosRequset() {
       this.fullscreenLoading = true
       await photoService.deletePhotos({
-        photos: this.checkedOptionsCopy.map(item => item.id)
+        photoIds: this.checkedOptionsCopy.map(item => item.photoId)
       })
       this.fullscreenLoading = false
       this.$message.success('删除成功')

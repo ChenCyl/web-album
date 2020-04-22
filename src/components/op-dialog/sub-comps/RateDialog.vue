@@ -20,37 +20,41 @@
 <script>
 import { photoService } from '@/request/services'
 import { mapState } from 'vuex'
+import dialogMixin from '@/core/mixins/dialogMixin'
 
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
-      rateValue: 0
+      rateValue: this.params.rate || 0
     }
   },
   computed: {
-    ...mapState(['checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['checkedOptionsCopy'])
   },
   methods: {
     handleClose(done) {
       done()
     },
     async addRateRequest() {
-      await photoService.addRate({
-        photos: this.checkedOptionsCopy.map(item => item.id),
+      if (this.params.rate) {
+        this._singleAddRateRequest()
+      } else {
+        this._bashAddRateRequest()
+      }
+    },
+    async _singleAddRateRequest() {
+      await photoService.setRate({
+        photoIds: [this.params.photoId],
+        rate: this.rateValue
+      })
+      this.$message.success('修改成功')
+      this.dVisible = false
+      this.$bus.$emit('flashDetail')
+    },
+    async _bashAddRateRequest() {
+      await photoService.setRate({
+        photoIds: this.checkedOptionsCopy.map(item => item.photoId),
         rate: this.rateValue
       })
       this.$message.success('添加成功')

@@ -27,7 +27,7 @@ export const photoService = {
     })
   },
 
-  addRate(data) {
+  setRate(data) {
     return request({
       url: '/setRate',
       method: 'post',
@@ -38,6 +38,22 @@ export const photoService = {
   deletePhotos(data) {
     return request({
       url: '/deletePhotos',
+      method: 'post',
+      data
+    })
+  },
+
+  getDetail(data) {
+    return request({
+      url: '/getDetail',
+      method: 'post',
+      data
+    })
+  },
+
+  updatePhotoName(data) {
+    return request({
+      url: '/updatePhotoName',
       method: 'post',
       data
     })
@@ -94,6 +110,14 @@ export const tagService = {
   setTags(data) {
     return request({
       url: '/setTags',
+      method: 'post',
+      data
+    })
+  },
+
+  removeTag(data) {
+    return request({
+      url: '/removeTag',
       method: 'post',
       data
     })

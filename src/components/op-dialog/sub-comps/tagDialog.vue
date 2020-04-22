@@ -14,8 +14,7 @@
             v-model="inputValue"
             ref="saveTagInput"
             size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
+            @keyup.enter.native="handleInputConfirm">
           </el-input>
           <el-button type="text" size="mini" @click="handleInputConfirm">确认</el-button>
         </div>
@@ -35,13 +34,10 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { tagService } from '@/request/services'
+import dialogMixin from '@/core/mixins/dialogMixin'
+
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
       tagValue: [],
@@ -51,15 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['filter', 'checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['filter', 'checkedOptionsCopy'])
   },
   created() {
     console.log(this.filter)
@@ -91,8 +79,8 @@ export default {
     async setTagsRequest() {
       if (this.tagValue.length) {
         await tagService.setTags({
-          photos: this.checkedOptionsCopy.map(item => item.id),
-          tags: this.tagValue
+          photoIds: this.checkedOptionsCopy.map(item => item.photoId),
+          tagIds: this.tagValue
         })
         this.$message.success('添加成功')
         this.dVisible = false

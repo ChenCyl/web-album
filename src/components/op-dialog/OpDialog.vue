@@ -1,5 +1,5 @@
 <template>
-  <component :is="message" :visible.sync="visible"></component>
+  <component :is="message" :visible.sync="visible" :params="params"></component>
 </template>
 
 <script>
@@ -17,7 +17,8 @@ export default {
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      params: {}
     }
   },
   created() {

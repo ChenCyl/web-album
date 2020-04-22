@@ -55,7 +55,8 @@
                   :loading="loading"
                   @handleOrderChange="handleOrderChange"
                   @handleSizeChange="handleSizeChange"
-                  @handleCurrentChange="handleCurrentChange"></main-content>
+                  @handleCurrentChange="handleCurrentChange"
+                  @handleKeywordChange="handleKeywordChange"></main-content>
 
   </div>
 </template>
@@ -85,7 +86,8 @@ export default {
         name: ''
       },
       albumPopVisible: false,
-      deletePopVisible: false
+      deletePopVisible: false,
+      searchKey: ''
     }
   },
   computed: {
@@ -115,8 +117,8 @@ export default {
       this.$refs.albumForm.validateField('name', async success => {
         if (!success) {
           await albumService.saveAlbum({
-            name: this.albumForm.name,
-            id: this.albumId
+            albumName: this.albumForm.name,
+            albumId: this.albumId
           })
           this.$message.success('修改成功')
           this.albumPopVisible = false
@@ -128,7 +130,7 @@ export default {
     // 删除相册
     async deleteAlbumRequest() {
       await albumService.deleteAlbum({
-        id: this.albumId
+        albumId: this.albumId
       })
       this.$message.success('删除成功')
       this.deletePopVisible = false
@@ -147,6 +149,10 @@ export default {
       this.currentPage = page
       this._getPhoto()
     },
+    handleKeywordChange(keyword) {
+      this.searchKey = keyword
+      this._getPhoto()
+    },
     async _getPhoto() {
       this.loading = true
       try {
@@ -158,10 +164,11 @@ export default {
           cameras: [],
           rates: [],
           tags: [],
-          order: this.orderValue
+          order: this.orderValue,
+          keyword: this.searchKey
         })
-        this.pageOptions = res.data.data
-        this.total = res.data.total
+        this.pageOptions = res.data.data.data
+        this.total = res.data.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

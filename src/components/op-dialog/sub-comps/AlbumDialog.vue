@@ -23,29 +23,17 @@
 <script>
 import { mapState } from 'vuex'
 import { photoService } from '@/request/services'
+import dialogMixin from '@/core/mixins/dialogMixin'
 
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
-      albumValue: ''
+      albumValue: this.params.album ? this.params.album.id : ''
     }
   },
   computed: {
-    ...mapState(['albums', 'checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['albums', 'checkedOptionsCopy'])
   },
   created() {
   },
@@ -55,14 +43,13 @@ export default {
     },
     async addToAlbumRequest() {
       if (this.albumValue) {
-        console.log('copyOptions', this.checkedOptionsCopy)
         await photoService.addToAlbum({
-          album: this.albumValue,
-          photos: this.checkedOptionsCopy.map(item => item.id)
+          albumId: this.albumValue,
+          photoIds: this.params.album ? [this.params.photoId] : this.checkedOptionsCopy.map(item => item.photoId)
         })
-        this.$message.success('添加成功')
+        this.$message.success('操作成功')
         this.dVisible = false
-        this.$bus.$emit('flashContent')
+        this.$bus.$emit(this.params.album ? 'flashDetail' : 'flashContent')
       } else {
         this.$message.warning('请选择相册')
       }

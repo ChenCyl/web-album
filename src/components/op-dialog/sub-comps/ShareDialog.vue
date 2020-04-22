@@ -39,14 +39,10 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { copy2Clip } from '@/utils/copy2Clip'
+import dialogMixin from '@/core/mixins/dialogMixin'
 
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
       form: {
@@ -57,15 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['checkedOptionsCopy'])
   },
   methods: {
     ...mapActions('share', ['createShareLink']),

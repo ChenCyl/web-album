@@ -6,32 +6,21 @@
 
 <script>
 import { mapState } from 'vuex'
+import dialogMixin from '@/core/mixins/dialogMixin'
+
 export default {
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [ dialogMixin ],
   data() {
     return {
       fullscreenLoading: false
     }
   },
   computed: {
-    ...mapState(['checkedOptionsCopy']),
-    dVisible: {
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-      get() {
-        return this.visible
-      }
-    }
+    ...mapState(['checkedOptionsCopy'])
   },
   mounted() {
     this.checkedOptionsCopy.forEach(item => {
-      this.downloadIamge(item.lImgUrl, item.name)
+      this.downloadIamge(item.fileUrlPath, item.name)
     })
   },
   methods: {

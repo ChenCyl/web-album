@@ -66,6 +66,7 @@ Message.close = function(id, userOnClose) {
       if (typeof userOnClose === 'function') {
         userOnClose(instances[i])
       }
+      instances[i].$destroy()
       instances.splice(i, 1)
       break
     }

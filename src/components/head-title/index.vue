@@ -39,7 +39,7 @@ export default {
     ...mapMutations(['updateUploadCdt']),
     uploadPhotos() {
       this.updateUploadCdt({
-        album: this.albumId || ''
+        albumId: this.albumId || ''
       })
       this.$dialog('upload')
     }

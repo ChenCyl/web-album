@@ -61,8 +61,8 @@ export default {
           page: this.currentPage,
           size: this.pageSize
         })
-        this.pageOptions = res.data.data
-        this.total = res.data.total
+        this.pageOptions = res.data.data.data
+        this.total = res.data.data.number
         this.loading = false
       } catch (err) {
         this.loading = false
