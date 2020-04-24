@@ -98,10 +98,10 @@ export default {
       handler(val) {
         this.albumId = val.params.id
         this._getPhoto()
-        let album = this.albums.find(item => item.id === this.albumId)
+        let album = this.albums.find(item => +item.albumId === +this.albumId)
         if (album) {
-          this.albumName = album.name
-          this.albumForm.name = album.name
+          this.albumName = album.albumName
+          this.albumForm.name = album.albumName
         } else {
           console.log('相册已被删除')
         }
@@ -135,7 +135,7 @@ export default {
       this.$message.success('删除成功')
       this.deletePopVisible = false
       await this.fetchAlbums()
-      this.$router.push(`/album/${this.albums[0].id}`)
+      this.$router.push(`/album/${this.albums[0].albumId}`)
     },
     handleOrderChange(val) {
       this.orderValue = val

@@ -6,10 +6,10 @@
     :before-close="handleClose"
     class="album-dialog">
     <el-radio-group v-model="albumValue">
-      <el-radio v-for="album in albums" :key="album.id" :label="album.id">
+      <el-radio v-for="album in albums" :key="album.albumId" :label="album.albumId">
         <div class="ib va-m">
-          <div class="name single-ellipsis" :title="album.name">{{ album.name }}</div>
-          <div>{{`(${album.num})`}}</div>
+          <div class="name single-ellipsis" :title="album.albumName">{{ album.albumName }}</div>
+          <div>{{`(${album.size})`}}</div>
         </div>
       </el-radio>
     </el-radio-group>

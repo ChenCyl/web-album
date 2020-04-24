@@ -96,7 +96,7 @@ export default new Vuex.Store({
     // 获取所有相册 用于侧边栏
     async fetchAlbums({ commit }) {
       let res = await albumService.getAlbums()
-      commit('updateAlbums', res.data)
+      commit('updateAlbums', res.data.data)
     }
   },
   modules: {

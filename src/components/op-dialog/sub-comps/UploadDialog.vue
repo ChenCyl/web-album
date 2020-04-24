@@ -63,20 +63,6 @@ export default {
         this.$bus.$emit('flashContent')
         done()
       }).catch()
-    },
-    async addToAlbumRequest() {
-      if (this.albumValue) {
-        console.log('copyOptions', this.checkedOptionsCopy)
-        await photoService.addToAlbum({
-          albumId: this.albumValue,
-          photoIds: this.checkedOptionsCopy.map(item => item.photoId)
-        })
-        this.$message.success('添加成功')
-        this.dVisible = false
-        this.$bus.$emit('flashContent')
-      } else {
-        this.$message.warning('请选择相册')
-      }
     }
   }
 }

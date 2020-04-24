@@ -12,9 +12,9 @@
                  @change="handleChange">
         <el-option
           v-for="item in albumOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          :key="item.id"
+          :label="item.name"
+          :value="item.id">
         </el-option>
       </el-select>
     </div>
@@ -43,9 +43,9 @@
                  @change="handleChange">
         <el-option
           v-for="item in cameraOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          :key="item.id"
+          :label="item.name"
+          :value="item.id">
         </el-option>
       </el-select>
     </div>
@@ -82,9 +82,9 @@
                  @change="handleChange">
         <el-option
           v-for="item in tagOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          :key="item.id"
+          :label="item.name"
+          :value="item.id">
         </el-option>
       </el-select>
     </div>

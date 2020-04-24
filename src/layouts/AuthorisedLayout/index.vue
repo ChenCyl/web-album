@@ -85,9 +85,9 @@
             </el-popover>
           </template>
           <el-menu-item v-for="item in albums"
-                        :index="`/album/${item.id}`"
-                        :key="item.id">
-            {{`${item.name} (${item.num})`}}
+                        :index="`/album/${item.albumId}`"
+                        :key="item.albumId">
+            {{`${item.albumName} (${item.size})`}}
           </el-menu-item>
         </el-submenu>
 

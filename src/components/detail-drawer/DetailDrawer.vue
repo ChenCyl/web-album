@@ -172,16 +172,16 @@
           </span>
           <el-form label-position="left" class="demo-table-expand">
             <el-form-item label="地点全称">
-              <span>{{ detailData.name || '暂无' }}</span>
+              <span>{{ detailData.photo_place || '暂无' }}</span> <!-- TODO: 后续确认 photo_place是这个还是方位 -->
             </el-form-item>
             <el-form-item label="纬度">
-              <span>{{ detailData.name || '暂无' }}</span>
+              <span>{{ detailData.latitude || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="经度">
-              <span>{{ detailData.name || '暂无' }}</span>
+              <span>{{ detailData.longitude || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="海拔">
-              <span>{{ detailData.name || '暂无' }}</span>
+              <span>{{ detailData.altitude || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="方位">
               <span>{{ detailData.name || '暂无' }}</span>

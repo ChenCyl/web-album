@@ -34,10 +34,12 @@
                 <span class="text-btn" @click="copyLink(row.uuid)">{{`https://localhost:8080/share/${row.uuid}`}}</span>
               </template>
             </el-table-column>
-            <!-- TODO: -->
-            <el-table-column prop="expire" label="照片数量"></el-table-column>
-
-            <el-table-column prop="expire" label="有效期至"></el-table-column>
+            <el-table-column label="照片数量">
+              <template slot-scope="{ row }">
+                {{ row.photos.length }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="expireTime" label="有效期至"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button
@@ -57,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { copy2Clip } from '@/utils/copy2Clip'
 
 export default {
@@ -71,11 +73,13 @@ export default {
   computed: {
     ...mapState('share', ['share'])
   },
-  created() {
+  mounted() {
+    this.removeExpirePhoto()
     console.log('share', this.share)
     this.shareData = Object.values(this.share)
   },
   methods: {
+    ...mapMutations('share', ['removeExpirePhoto']),
     copyLink(text) {
       copy2Clip(text, () => {
         this.$message.success('成功复制到剪切板')
