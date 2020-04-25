@@ -106,7 +106,7 @@
         <div class="account-wrap">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              烙锅丸子<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ userEmail }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="share-manage"><i class="el-icon-connection"></i>分享管理</el-dropdown-item>
@@ -164,7 +164,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(['dateTree', 'albums'])
+    ...mapState(['dateTree', 'albums']),
+    ...mapState('user', ['userEmail'])
   },
   watch: {
     $route: {

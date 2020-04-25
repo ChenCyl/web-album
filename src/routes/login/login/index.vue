@@ -18,7 +18,7 @@
       </el-form>
     </div>
     <div class="comfirm-btn">
-      <el-button type="primary" @click="login">登录</el-button>
+      <el-button type="primary" @click="loginRequest">登录</el-button>
     </div>
     <div class="no-account">
       <span>还没有账号？</span>
@@ -31,6 +31,7 @@
 <script>
 
 import validator from '@/utils/validate'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -68,23 +69,29 @@ export default {
     }
   },
   methods: {
-    login() {
-      // this.$refs.loginForm.validate((valid) => {
-      //   if (valid) {
-      //     alert('submit!')
-      //   } else {
-      //     console.log('error submit!!')
-      //     return false
-      //   }
-      // })
-      // console.log('click login')
-      this.$router.push('/photo')
+    ...mapActions('user', ['login']),
+    loginRequest() {
+      this.$refs.loginForm.validate(async (valid) => {
+        if (valid) {
+          await this.login({
+            userEmail: this.loginForm.account,
+            password: this.loginForm.password
+          })
+          if (this.$route.query && this.$route.query.redirect) {
+            this.$router.push(this.$route.query.redirect)
+          } else {
+            this.$router.push('/photo')
+          }
+        } else {
+          return false
+        }
+      })
     },
     goRegister() {
-      this.$router.push('/login/register')
+      this.$router.push('/register')
     },
     forgetPass() {
-      this.$router.push('/login/forget-password')
+      this.$router.push('/forget-password')
     }
   }
 }

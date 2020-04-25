@@ -2,6 +2,31 @@ import request from './index'
 
 // service + api
 
+export const userService = {
+  login(data) {
+    return request({
+      url: '/login',
+      method: 'post',
+      data
+    })
+  },
+
+  getUserInfo(token) {
+    return request({
+      url: '/info',
+      method: 'post',
+      data: { token }
+    })
+  },
+
+  logout() {
+    return request({
+      url: '/logout',
+      method: 'post'
+    })
+  }
+}
+
 export const photoService = {
 
   getPhotos(data) {

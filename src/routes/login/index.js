@@ -1,17 +1,17 @@
 import layouts from '@/layouts'
 
 export default {
-  path: 'login',
+  path: '',
   component: layouts.LoginLayout,
   children: [
     {
-      path: 'index',
-      name: 'login-index',
+      path: 'login',
+      name: 'login',
       component: () => import(/* webpackChunkName: "login" */ './login')
     },
     {
       path: 'register',
-      name: 'login-register',
+      name: 'register',
       component: () => import(/* webpackChunkName: "login" */ './register')
     },
     {

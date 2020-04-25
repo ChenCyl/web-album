@@ -61,7 +61,7 @@ export default {
       done()
     },
     async shareRequest() {
-      let linkId = await this.createShareLink({
+      let link = await this.createShareLink({
         title: this.form.title,
         intro: this.form.intro
       })
@@ -75,10 +75,10 @@ export default {
             {
               class: 'text-btn',
               on: {
-                click: () => { this.copyLink(linkId)}
+                click: () => { this.copyLink(link)}
               }
             },
-            'https://localhost:8080/share/' + linkId) // FIXME:
+            link)
         ]),
         type: 'success',
         duration: 0

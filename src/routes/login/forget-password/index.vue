@@ -120,10 +120,10 @@ export default {
       })
     },
     goRegister() {
-      this.$router.push('/login/register')
+      this.$router.push('/register')
     },
     forgetPass() {
-      this.$router.push('/login/forget-password')
+      this.$router.push('/forget-password')
     },
     getValiCode() {
       this.$refs.registerForm.validateField('account', (err) => {

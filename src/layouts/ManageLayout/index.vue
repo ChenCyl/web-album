@@ -22,10 +22,6 @@
     </el-aside>
 
     <el-container>
-      <!-- 顶栏 -->
-      <el-header>
-        邮箱
-      </el-header>
       <!-- 主要内容 -->
       <el-main>
         <router-view></router-view>
@@ -37,7 +33,7 @@
 
 <script>
 import theLogo from '@/components/the-logo'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { albumService } from '@/request/services'
 
 export default {
@@ -48,6 +44,9 @@ export default {
     return {
       defaultActive: ''
     }
+  },
+  computed: {
+    ...mapState('user', ['userEmail'])
   },
   watch: {
     $route: {

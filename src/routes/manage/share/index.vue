@@ -31,7 +31,7 @@
             <el-table-column prop="intro" label="介绍" show-overflow-tooltip></el-table-column>
             <el-table-column label="链接">
               <template slot-scope="{ row }">
-                <span class="text-btn" @click="copyLink(row.uuid)">{{`https://localhost:8080/share/${row.uuid}`}}</span>
+                <span class="text-btn" @click="copyLink(row.link)">{{ row.link }}</span>
               </template>
             </el-table-column>
             <el-table-column label="照片数量">

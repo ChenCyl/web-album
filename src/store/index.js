@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import getters from './getters'
 
 import share from './modules/share'
+import user from './modules/user'
 import { photoService, albumService } from '@/request/services'
 
 Vue.use(Vuex)
@@ -100,6 +102,8 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    share
-  }
+    share,
+    user
+  },
+  getters
 })

@@ -12,6 +12,8 @@ import HeadTitle from '@/components/head-title'
 import DetailDrawer from '@/components/detail-drawer'
 import OpDialog from '@/components/op-dialog'
 
+import '@/permission' // permission control
+
 // 全局组件
 Vue.component('head-title', HeadTitle)
 Vue.prototype.$detail = DetailDrawer
