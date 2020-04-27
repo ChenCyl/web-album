@@ -1,20 +1,20 @@
 <template>
   <div class="login-page">
-    <div class="logo">logo</div>
-    <div class="title">忘记密码</div>
+    <!-- <div class="logo">logo</div>
+    <div class="title">忘记密码</div> -->
     <div class="input-wrap">
-      <el-form :model="registerForm"
-               ref="registerForm"
+      <el-form :model="modiPassForm"
+               ref="modiPassForm"
                :rules="rules">
-        <el-form-item prop="account">
-          <el-input v-model="registerForm.account"
+        <!-- <el-form-item prop="account">
+          <el-input v-model="modiPassForm.account"
                     placeholder="请输入邮箱"
                     prefix-icon="el-icon-message"></el-input>
-        </el-form-item>
-        <el-row :gutter="10">
+        </el-form-item> -->
+        <!-- <el-row :gutter="10">
           <el-col :span="16">
             <el-form-item prop="valiCode">
-              <el-input v-model="registerForm.valiCode"
+              <el-input v-model="modiPassForm.valiCode"
                         placeholder="请输入验证码"
                         prefix-icon="el-icon-key"></el-input>
             </el-form-item>
@@ -27,15 +27,21 @@
                          :disabled="codeBtnDisabled">{{ codeBtnText }}</el-button>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
+        <el-form-item prop="oldPassword">
+          <el-input v-model="modiPassForm.oldPassword"
+                    placeholder="请输入旧密码"
+                    prefix-icon="el-icon-lock"
+                    show-password></el-input>
+        </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="registerForm.password"
+          <el-input v-model="modiPassForm.password"
                     placeholder="请设置新密码"
                     prefix-icon="el-icon-lock"
                     show-password></el-input>
         </el-form-item>
         <el-form-item prop="password2">
-          <el-input v-model="registerForm.password2"
+          <el-input v-model="modiPassForm.password2"
                     placeholder="再次确认新密码"
                     prefix-icon="el-icon-lock"
                     show-password></el-input>
@@ -51,14 +57,15 @@
 <script>
 
 import validator from '@/utils/validate'
+import { mapActions } from 'vuex'
 
 export default {
   data() {
     const accountValidator = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入邮箱'))
-      } else if (!validator.isEmail(value)) {
-        callback(new Error('非法邮箱'))
+        callback(new Error('请输入用户名 '))
+      } else if (!validator.isAccountName(value)) {
+        callback(new Error('用户名是 1 ~ 10 位字母和数字的组合'))
       } else {
         callback()
       }
@@ -77,25 +84,21 @@ export default {
     const pass2Validator = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.registerForm.password) {
+      } else if (value !== this.modiPassForm.password) {
         callback(new Error('两次输入密码不一致'))
       } else {
         callback()
       }
     }
     return {
-      registerForm: {
-        account: '',
-        valiCode: '',
+      modiPassForm: {
+        oldPassword: '',
         password: '',
         password2: ''
       },
       rules: {
-        account: [
-          { validator: accountValidator, trigger: 'blur' }
-        ],
-        valiCode: [
-          { required: true, trigger: 'blur', message: '请输入验证码' }
+        oldPassword: [
+          { validator: passwordValidator, trigger: 'blur' }
         ],
         password: [
           { validator: passwordValidator, trigger: 'blur' }
@@ -109,10 +112,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', ['modifyPassword', 'logout']),
     comfirm() {
-      this.$refs.registerForm.validate((valid) => {
+      this.$refs.modiPassForm.validate(async (valid) => {
         if (valid) {
-          alert('submit!')
+          await this.modifyPassword({
+            oldPassword: this.modiPassForm.oldPassword,
+            newPassword: this.modiPassForm.password
+          })
+          this.$message.success('修改成功，请重新登录')
+          await this.logout()
+          this.$router.push('/login')
         } else {
           console.log('error submit!!')
           return false
@@ -122,11 +132,8 @@ export default {
     goRegister() {
       this.$router.push('/register')
     },
-    forgetPass() {
-      this.$router.push('/forget-password')
-    },
     getValiCode() {
-      this.$refs.registerForm.validateField('account', (err) => {
+      this.$refs.modiPassForm.validateField('account', (err) => {
         if (err) return
         this._getValiCode()
       })
@@ -150,9 +157,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped src="../style.scss"></style>
+<style lang="scss" scoped src="@/routes/login/style.scss"></style>
 <style lang="scss" scoped>
 .code-btn {
-     width: 100%;
+  width: 100%;
+}
+.login-page {
+  width: 350px;
 }
 </style>

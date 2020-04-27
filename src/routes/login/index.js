@@ -13,11 +13,6 @@ export default {
       path: 'register',
       name: 'register',
       component: () => import(/* webpackChunkName: "login" */ './register')
-    },
-    {
-      path: 'forget-password',
-      name: 'forget-password',
-      component: () => import(/* webpackChunkName: "login" */ './forget-password')
     }
   ]
 }

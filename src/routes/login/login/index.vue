@@ -6,7 +6,7 @@
       <el-form :model="loginForm" ref="loginForm" :rules="rules">
         <el-form-item prop="account">
           <el-input v-model="loginForm.account"
-                    placeholder="请输入邮箱"
+                    placeholder="请输入用户名"
                     prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -23,7 +23,7 @@
     <div class="no-account">
       <span>还没有账号？</span>
       <el-link type="primary" @click="goRegister">立即注册</el-link>
-      <el-link type="warning" class="forget-pass" @click="forgetPass">忘记密码</el-link>
+      <!-- <el-link type="warning" class="forget-pass" @click="forgetPass">忘记密码</el-link> -->
     </div>
   </div>
 </template>
@@ -37,9 +37,9 @@ export default {
   data() {
     function accountValidator(rule, value, callback) {
       if (value === '') {
-        callback(new Error('请输入邮箱'))
-      } else if (!validator.isEmail(value)) {
-        callback(new Error('非法邮箱'))
+        callback(new Error('请输入用户名'))
+      } else if (!validator.isAccountName(value)) {
+        callback(new Error('用户名是 1 ~ 10 位字母和数字的组合'))
       } else {
         callback()
       }
@@ -74,7 +74,7 @@ export default {
       this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           await this.login({
-            userEmail: this.loginForm.account,
+            userName: this.loginForm.account,
             password: this.loginForm.password
           })
           if (this.$route.query && this.$route.query.redirect) {
@@ -89,9 +89,6 @@ export default {
     },
     goRegister() {
       this.$router.push('/register')
-    },
-    forgetPass() {
-      this.$router.push('/forget-password')
     }
   }
 }

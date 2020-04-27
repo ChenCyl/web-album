@@ -1,5 +1,8 @@
 <template>
   <div class="login-page">
+    <el-link @click="goLogin"
+             :underline="false"
+             class="back-btn el-icon-video-play"></el-link>
     <div class="logo">logo</div>
     <div class="title">注册账号</div>
     <div class="input-wrap">
@@ -8,10 +11,10 @@
                :rules="rules">
         <el-form-item prop="account">
           <el-input v-model="registerForm.account"
-                    placeholder="请输入邮箱"
+                    placeholder="请输入用户名"
                     prefix-icon="el-icon-message"></el-input>
         </el-form-item>
-        <el-row :gutter="10">
+        <!-- <el-row :gutter="10">
           <el-col :span="16">
             <el-form-item prop="valiCode">
               <el-input v-model="registerForm.valiCode"
@@ -27,7 +30,7 @@
                          :disabled="codeBtnDisabled">{{ codeBtnText }}</el-button>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-form-item prop="password">
           <el-input v-model="registerForm.password"
                     placeholder="请设置登录密码"
@@ -51,14 +54,15 @@
 <script>
 
 import validator from '@/utils/validate'
+import { userService } from '@/request/services'
 
 export default {
   data() {
     const accountValidator = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入邮箱'))
-      } else if (!validator.isEmail(value)) {
-        callback(new Error('非法邮箱'))
+        callback(new Error('请输入用户名'))
+      } else if (!validator.isAccountName(value)) {
+        callback(new Error('用户名是 1 ~ 10 位字母和数字的组合'))
       } else {
         callback()
       }
@@ -86,7 +90,7 @@ export default {
     return {
       registerForm: {
         account: '',
-        valiCode: '',
+        // valiCode: '',
         password: '',
         password2: ''
       },
@@ -94,9 +98,9 @@ export default {
         account: [
           { validator: accountValidator, trigger: 'blur' }
         ],
-        valiCode: [
-          { required: true, trigger: 'blur', message: '请输入验证码' }
-        ],
+        // valiCode: [
+        //   { required: true, trigger: 'blur', message: '请输入验证码' }
+        // ],
         password: [
           { validator: passwordValidator, trigger: 'blur' }
         ],
@@ -110,21 +114,24 @@ export default {
   },
   methods: {
     comfirm() {
-      this.$refs.registerForm.validate((valid) => {
+      this.$refs.registerForm.validate(async (valid) => {
         if (valid) {
-          alert('submit!')
+          await userService.register({
+            userName: this.registerForm.account,
+            password: this.registerForm.password
+          })
+          this.$message.success("注册成功")
+          this.$router.push('/login')
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
-    goRegister() {
-      this.$router.push('/register')
+    goLogin() {
+      this.$router.push('/login')
     },
-    forgetPass() {
-      this.$router.push('/forget-password')
-    },
+
     getValiCode() {
       this.$refs.registerForm.validateField('account', (err) => {
         if (err) return
@@ -153,6 +160,6 @@ export default {
 <style lang="scss" scoped src="../style.scss"></style>
 <style lang="scss" scoped>
 .code-btn {
-     width: 100%;
+  width: 100%;
 }
 </style>

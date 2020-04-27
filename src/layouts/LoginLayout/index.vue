@@ -14,6 +14,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@import "@/styles/common.scss";
+
 .login-layout {
   display: flex;
   height: 100%;
@@ -23,7 +26,7 @@ export default {
   }
   .right-area {
     flex-basis: 500px;
-    background-color: aquamarine;
+    background-color: $color-white;
     padding: 0 80px;
     .content {
       margin-top: 20vh;

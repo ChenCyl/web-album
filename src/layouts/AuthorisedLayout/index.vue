@@ -106,11 +106,11 @@
         <div class="account-wrap">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              {{ userEmail }}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{ userName }}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="share-manage"><i class="el-icon-connection"></i>分享管理</el-dropdown-item>
-              <el-dropdown-item command="setting"><i class="el-icon-setting"></i>设置</el-dropdown-item>
+              <el-dropdown-item command="setting"><i class="el-icon-setting"></i>修改密码</el-dropdown-item>
               <el-dropdown-item command="exit" divided><i class="el-icon-circle-close"></i>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -165,7 +165,7 @@ export default {
   },
   computed: {
     ...mapState(['dateTree', 'albums']),
-    ...mapState('user', ['userEmail'])
+    ...mapState('user', ['userName'])
   },
   watch: {
     $route: {
@@ -192,14 +192,30 @@ export default {
   methods: {
     ...mapMutations(['updateCheckDates']),
     ...mapActions(['fetchFilter', 'fetchAlbums']),
+    ...mapActions('user', ['logout']),
     handleDateCheck(node, data) {
       this.updateCheckDates(data.checkedKeys.filter(date => date))
       if (this.$route.name !== 'photo-date') {
         this.$router.push('/photo/date')
       }
     },
-    handleCommand() {
-      this.$router.push('/manage/share')
+    handleCommand(cmd) {
+      switch (cmd) {
+      case 'share-manage':
+        this.$router.push('/manage/share')
+        break
+      case 'setting':
+        this.$router.push('/manage/setting')
+        break
+      case 'exit':
+        this.logout().then(
+          this.$router.push('/login')
+        )
+        break
+      default:
+        break
+      }
+
     },
     // 点击全选事件 -> 子组件数据改变
     // 子组件数据改变 -> 全选值改变

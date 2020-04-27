@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // // NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // NOTE: router name
-const whiteList = ['login', 'register', 'forget-password', 'share', 'errorPage'] // no redirect whitelist
+const whiteList = ['login', 'register', 'share', 'errorPage'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -27,13 +27,14 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       // NProgress.done()
     } else {
+      console.log('store.getters.name',store.getters.name)
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
         next()
       } else {
         try {
           // get user info
-          await store.dispatch('user/getInfo')
+          await store.dispatch('user/getUserInfo')
 
           next()
         } catch (error) {

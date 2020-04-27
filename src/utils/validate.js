@@ -14,5 +14,10 @@ export default {
   isPassword(val) {
     const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/
     return reg.test(val)
+  },
+
+  isAccountName(val) {
+    const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{1,10}$/
+    return reg.test(val)
   }
 }

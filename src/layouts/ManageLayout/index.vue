@@ -15,7 +15,7 @@
         <el-menu-item index="/manage/setting" key="/manage/setting">
           <template slot="title">
             <i class="el-icon-setting"></i>
-            <span> 设置</span>
+            <span> 修改密码</span>
           </template>
         </el-menu-item>
       </el-menu>
@@ -46,7 +46,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['userEmail'])
+    ...mapState('user', ['userName'])
   },
   watch: {
     $route: {

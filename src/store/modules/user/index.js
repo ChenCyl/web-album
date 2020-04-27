@@ -9,7 +9,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 const getDefaultState = () => {
   return {
     token: getToken(),
-    userEmail: ''
+    userName: ''
     // avatar: ''
   }
 }
@@ -23,8 +23,8 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_EMAIL: (state, userEmail) => {
-    state.userEmail = userEmail
+  SET_NAME: (state, userName) => {
+    state.userName = userName
   }
   // SET_AVATAR: (state, avatar) => {
   //   state.avatar = avatar
@@ -34,13 +34,13 @@ const mutations = {
 const actions = {
   // user userService.
   login({ commit }, userInfo) {
-    const { userEmail, password } = userInfo
+    const { userName, password } = userInfo
     return new Promise((resolve, reject) => {
-      userService.login({ userEmail: userEmail.trim(), password: password }).then(response => {
+      userService.login({ username: userName.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        commit('SET_EMAIL', userEmail)
+        commit('SET_NAME', userName)
         resolve()
       }).catch(error => {
         reject(error)
@@ -51,16 +51,17 @@ const actions = {
   // get user info
   getUserInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      userService.getUserInfo(state.token).then(response => {
+      // userService.getUserInfo(state.token).then(response => {
+        userService.getUserInfo().then(response => {
         const { data } = response
 
         if (!data) {
           reject('Verification failed, please userService. again.')
         }
 
-        const { userEmail } = data
+        const { userName } = data.data // FIXME:
 
-        commit('SET_EMAIL', userEmail)
+        commit('SET_NAME', userName)
         // commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
@@ -89,6 +90,15 @@ const actions = {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+
+  modifyPassword({ commit, state }, payload) {
+    const { oldPassword, newPassword } = payload
+    return userService.modifyPassword({
+      userName: state.userName,
+      oldPassword,
+      newPassword
     })
   }
 }

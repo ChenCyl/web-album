@@ -11,11 +11,10 @@ export const userService = {
     })
   },
 
-  getUserInfo(token) {
+  getUserInfo() { // token 在 header X-TOKEN 中
     return request({
-      url: '/info',
-      method: 'post',
-      data: { token }
+      url: '/getUserInfo',
+      method: 'get'
     })
   },
 
@@ -23,6 +22,22 @@ export const userService = {
     return request({
       url: '/logout',
       method: 'post'
+    })
+  },
+
+  register(data) {
+    return request({
+      url: '/register',
+      method: 'post',
+      data
+    })
+  },
+
+  modifyPassword(data) {
+    return request({
+      url: '/modifyPassword',
+      method: 'post',
+      data
     })
   }
 }
