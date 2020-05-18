@@ -97,15 +97,24 @@ export const photoService = {
       method: 'post',
       data
     })
+  },
+
+  addPhoto(data) {
+    return request({
+      url: '/addphoto',
+      method: 'post',
+      data
+    })
   }
 }
 
 export const cameraService = {
 
-  getCameraList() {
+  getCameraList(data) {
     return request({
       url: '/getCameraList',
-      method: 'post'
+      method: 'post',
+      data
     })
   }
 
@@ -163,5 +172,21 @@ export const tagService = {
     })
   }
 
+}
+
+export const shareService = {
+  getAllShare() {
+    return request({
+      url: '/getAllShare',
+      method: 'get'
+    })
+  },
+  saveAllShare(data) {
+    return request({
+      url: 'saveAllShare',
+      method: 'post',
+      data
+    })
+  }
 }
 

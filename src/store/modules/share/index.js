@@ -1,4 +1,5 @@
 import { getuuid } from '@/utils/uuid'
+import { shareService } from '@/request/services'
 
 const state = {
   share: {}
@@ -21,7 +22,7 @@ const mutations = {
 }
 
 const actions = {
-  createShareLink({ commit, rootState }, data) {
+  createShareLink({ commit, state, rootState }, data) {
     let uuid = getuuid()
     let link = 'http://localhost:8080/#/share/' + uuid  //FIXME:
     let now = $moment()
@@ -35,7 +36,15 @@ const actions = {
       createTime: now.format('YYYY-MM-DD HH:mm'),
       expireTime: now.add(3, 'days').format('YYYY-MM-DD HH:mm')  //FIXME:
     })
+    shareService.saveAllShare({
+      data: JSON.stringify(state.share)
+    })
     return link
+  },
+  async getAllShare({ commit }) {
+    let res = await shareService.getAllShare()
+    state.share = JSON.parse(res.data)
+    commit('removeExpirePhoto')
   }
 }
 

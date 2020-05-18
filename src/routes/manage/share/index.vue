@@ -3,66 +3,75 @@
     <head-title title="分享管理"></head-title>
 
     <div class="content with-shadow">
-      <!-- 图片操作区 -->
-      <div class="op-cont typo-base">
-        <div class="total">
-          共 <span class="highlight">{{ shareData.length }}</span> 个分享链接
-        </div>
-        <div class="op">
-          <div class="search">
-            <el-input size="small" placeholder="输入相机名称"></el-input>
+      <div v-if="shareData && shareData.length === 0">
+        <no-content />
+      </div>
+      <template v-else>
+        <!-- 图片操作区 -->
+        <div class="op-cont typo-base">
+          <div class="total">
+            共 <span class="highlight">{{ shareData.length }}</span> 个分享链接
           </div>
-          <el-tooltip content="切换视图" placement="top" effect="light">
-            <div class="switch-display el-icon-set-up text-btn"></div>
-          </el-tooltip>
+          <div class="op">
+            <div class="search">
+              <el-input size="small" placeholder="输入相机名称"></el-input>
+            </div>
+            <el-tooltip content="切换视图" placement="top" effect="light">
+              <div class="switch-display el-icon-set-up text-btn"></div>
+            </el-tooltip>
+          </div>
         </div>
-      </div>
-      <!-- 表格区 -->
-      <div class="table-cont">
-        <el-table
-          ref="multipleTable"
-          :data="shareData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          header-row-class-name="table-head"
-          stripe>
-          <template>
-            <el-table-column prop="title" label="主题"></el-table-column>
-            <el-table-column prop="intro" label="介绍" show-overflow-tooltip></el-table-column>
-            <el-table-column label="链接">
-              <template slot-scope="{ row }">
-                <span class="text-btn" @click="copyLink(row.link)">{{ row.link }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="照片数量">
-              <template slot-scope="{ row }">
-                {{ row.photos.length }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="expireTime" label="有效期至"></el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </template>
-        </el-table>
-      </div>
+        <!-- 表格区 -->
+        <div class="table-cont">
+          <el-table
+            ref="multipleTable"
+            :data="shareData"
+            tooltip-effect="dark"
+            style="width: 100%"
+            header-row-class-name="table-head"
+            stripe>
+            <template>
+              <el-table-column prop="title" label="主题"></el-table-column>
+              <el-table-column prop="intro" label="介绍" show-overflow-tooltip></el-table-column>
+              <el-table-column label="链接">
+                <template slot-scope="{ row }">
+                  <span class="text-btn" @click="copyLink(row.link)">{{ row.link }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="照片数量">
+                <template slot-scope="{ row }">
+                  {{ row.photos.length }}
+                </template>
+              </el-table-column>
+              <el-table-column prop="expireTime" label="有效期至"></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </template>
+          </el-table>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { copy2Clip } from '@/utils/copy2Clip'
+import NoContent from '@/components/no-content'
 
 export default {
+  components: {
+    NoContent
+  },
   props: {
   },
   data() {
@@ -73,13 +82,13 @@ export default {
   computed: {
     ...mapState('share', ['share'])
   },
-  mounted() {
-    this.removeExpirePhoto()
+  async mounted() {
+    await this.getAllShare()
     console.log('share', this.share)
     this.shareData = Object.values(this.share)
   },
   methods: {
-    ...mapMutations('share', ['removeExpirePhoto']),
+    ...mapActions('share', ['getAllShare']),
     copyLink(text) {
       copy2Clip(text, () => {
         this.$message.success('成功复制到剪切板')

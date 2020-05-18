@@ -61,16 +61,16 @@ export default {
         let res = await photoService.getPhotos({
           page: this.currentPage,
           size: this.pageSize,
-          albums: ["no_album"],
+          albums: [-1],
           dates: [],
           cameras: [],
           rates: [0],
-          tags: ["no_tag"],
+          tags: [""],
           order: this.orderValue,
           keyword: this.searchKey
         })
-        this.pageOptions = res.data.data.data
-        this.total = res.data.data.number
+        this.pageOptions = res.data.data
+        this.total = res.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

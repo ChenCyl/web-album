@@ -4,8 +4,11 @@
     <el-aside width="auto">
       <el-menu
         router
-        :default-active="defaultActive">
-        <div class="logo-wrap"><the-logo /></div>
+        :default-active="defaultActive"
+        background-color="#181b24"
+        text-color="#FFFFFF"
+        active-text-color="#409EFF">
+        <div class="logo-wrap"><the-logo type="white" /></div>
         <el-menu-item index="/manage/share" key="/manage/share">
           <template slot="title">
             <i class="el-icon-connection"></i>
@@ -75,13 +78,11 @@ export default {
 }
 
 .el-menu:not(.el-menu--collapse) {
-  width: 200px
+  width: 220px
 }
 
 .logo-wrap {
-  height: 45px;
-  width: 150px;
-  margin: 10px auto;
+  margin-top: 10px;
 }
 
 .el-aside {

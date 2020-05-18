@@ -6,11 +6,10 @@ import { getToken } from '@/utils/auth'
 // create an axios instance
 const axiosInstance = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  // timeout: 5000 // request timeout,
-  baseURL: 'http://120.26.186.13:9099/mock/13',
-  timeout: 30000,
-  withCredentials: false // 跨域请求时是否需要使用凭证
+  withCredentials: true, // send cookies when cross-domain requests
+  baseURL: 'http://116.62.152.21:8080/api',
+  // baseURL: 'http://120.26.186.13:9099/mock/13',
+  timeout: 50000
 })
 
 // request interceptor
@@ -18,12 +17,10 @@ axiosInstance.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    if (store.getters.token) {
-      // let each request carry token
-      // NOTE ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
-    }
+    // if (store.getters.token) {
+    //   config.headers['X-Token'] = getToken()
+    // }
+    console.log('request', config)
     return config
   },
   error => {
@@ -46,38 +43,31 @@ axiosInstance.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    //FIXME:
-    // const res = response.data
-
-    // // if the custom code is not 20000, it is judged as an error.
-    // if (res.code !== 20000) {
-    //   Message({
-    //     message: res.message || 'Error',
-    //     type: 'error',
-    //     duration: 5 * 1000
-    //   })
-
-    //   // NOTE 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-    //   if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-    //     // to re-login
-    //     MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-    //       confirmButtonText: 'Re-Login',
-    //       cancelButtonText: 'Cancel',
-    //       type: 'warning'
-    //     }).then(() => {
-    //       store.dispatch('user/resetToken').then(() => {
-    //         location.reload()
-    //       })
-    //     })
-    //   }
-    //   return Promise.reject(new Error(res.message || 'Error'))
-    // } else {
-    //   return res
-    // }
-    //FIXME:
-
-    return response
-
+    const res = response.data
+    console.log('response', res)
+    if (res.code !== 200) {
+      Message({
+        message: res.message || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
+      // cookie expires
+      if (res.code === 514) {
+        // to re-login
+        MessageBox.confirm('您的登录验证信息已过期', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
+        })
+      }
+      return Promise.reject(new Error(res.message || 'Error'))
+    } else {
+      return res
+    }
   },
   error => {
     console.log('err' + error) // for debug

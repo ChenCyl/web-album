@@ -1,94 +1,113 @@
 <template>
   <div class="content with-shadow">
-    <!-- 图片操作区 -->
-    <div class="op-cont typo-base">
-      <div class="total">
-        共 <span class="highlight">{{ total }}</span> 张照片
-      </div>
-      <div class="op">
-        <div class="order">
-          <span>排序：</span>
-          <el-select v-model="orderValue"
-                     placeholder="请选择"
-                     @change="handleOrderChange">
-            <el-option
-              v-for="item in orderOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="search">
-          <el-input v-model.trim="keyword"
-                    size="small"
-                    placeholder="输入相片名称"
-                    @input="handleKeywordChange"></el-input>
-        </div>
-        <el-tooltip content="切换视图" placement="top" effect="light">
-          <div class="switch-display el-icon-set-up text-btn"></div>
-        </el-tooltip>
-      </div>
+    <div v-if="pageOptions && pageOptions.length === 0">
+      <no-content />
     </div>
-    <!-- 图片陈列区 -->
-    <div class="photo-cont" v-loading="loading">
-      <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
-      <el-checkbox-group v-model="checkedOptions" @change="handleCheckedOptionsChange">
-        <div v-for="option in pageOptions"
-             :key="option.photoId"
-             :class="{
-               'photo-wrap': true,
-               'photo-checked': checkedOptions.findIndex(item => item.photoId === option.photoId) > -1}">
-          <div class="op-wrap">
-            <el-checkbox :label="option"></el-checkbox>
-            <div>
-              <i class="text-btn el-icon-view" @click="viewDetail(option)" title="查看详细参数"></i>
-              <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                  <i class="text-btn el-icon-more-outline"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-files">添加到相册</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-star-off">添加等级</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-price-tag">添加标签</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-share">分享</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-download">下载</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-close">删除</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+    <template v-else>
+      <!-- 图片操作区 -->
+      <div class="op-cont typo-base">
+        <div class="total">
+          共 <span class="highlight">{{ total }}</span> 张照片
+        </div>
+        <div class="op">
+          <div class="order">
+            <span>排序：</span>
+            <el-select v-model="orderValue"
+                       placeholder="请选择"
+                       @change="handleOrderChange">
+              <el-option
+                v-for="item in orderOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search">
+            <el-input v-model.trim="keyword"
+                      size="small"
+                      placeholder="输入相片名称进行搜索"
+                      @input="handleKeywordChange"></el-input>
+          </div>
+        <!-- <el-tooltip content="切换视图" placement="top" effect="light">
+          <div class="switch-display el-icon-set-up text-btn"></div>
+        </el-tooltip> -->
+        </div>
+      </div>
+      <!-- 图片陈列区 -->
+      <div class="photo-cont" v-loading="loading">
+        <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
+        <el-checkbox-group v-model="checkedOptions" @change="handleCheckedOptionsChange">
+          <div v-for="option in pageOptions"
+               :key="option.photoId"
+               :class="{
+                 'photo-wrap': true,
+                 'photo-checked': checkedOptions.findIndex(item => item.photoId === option.photoId) > -1}">
+            <div class="op-wrap">
+              <el-checkbox :label="option"></el-checkbox>
+              <div>
+                <span class="text-btn view-detail-btn" @click="viewDetail(option)" title="查看详细参数">i</span>
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    <i class="text-btn el-icon-more-outline"></i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item icon="el-icon-files">添加到相册</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-star-off">添加等级</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-price-tag">添加标签</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-share">分享</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-download">下载</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-close">删除</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </div>
+            <div class="image-wrap">
+              <el-image style="width: 150px; height: 140px"
+                        :src="option.fileMinUrlPath"
+                        fit="contain"
+                        :preview-src-list="[option.fileUrlPath]"></el-image>
+            <!-- FIXME: fileMinUrlPath => fileUrlPath -->
+            </div>
+            <div class="title-wrap typo-base">
+              <div class="title single-ellipsis" :title="option.photoName">{{option.photoName | formatName}}</div>
+              <div class="format">.{{option.fileFormat}}</div>
             </div>
           </div>
-          <div class="image-wrap">
-            <el-image style="width: 150px; height: 140px"
-                      :src="option.fileMinUrlPath"
-                      fit="contain"
-                      :preview-src-list="[option.fileMinUrlPath]"></el-image>
-            <!-- FIXME: fileMinUrlPath => fileUrlPath -->
-          </div>
-          <div class="title-wrap typo-base">
-            <div class="title single-ellipsis" title="nia">{{option.photoName}}</div>
-            <div class="format">.{{option.fileFormat}}</div>
-          </div>
-        </div>
-      </el-checkbox-group>
-    </div>
-    <!-- 分页 -->
-    <el-pagination background
-                   @size-change="handleSizeChange"
-                   @current-change="handleCurrentChange"
-                   :current-page="currentPage"
-                   :page-sizes="[20, 40, 80]"
-                   :page-size="pageSize"
-                   layout="sizes, prev, pager, next, jumper"
-                   :total="total">
-    </el-pagination>
+        </el-checkbox-group>
+      </div>
+      <!-- 分页 -->
+      <el-pagination background
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[20, 40, 80]"
+                     :page-size="pageSize"
+                     layout="sizes, prev, pager, next, jumper"
+                     :total="total">
+      </el-pagination>
+    </template>
   </div>
 </template>
 
 <script>
 import footerMixin from '@/core/mixins/footerMixin'
+import NoContent from '@/components/no-content'
 
 export default {
+  components: {
+    NoContent
+  },
+  filters: {
+    formatName(val) {
+      let arr = val.split('.')
+      if (arr.length > 1) {
+        arr.pop()
+        return arr.join('.')
+      }
+      return val
+    }
+  },
   mixins: [ footerMixin ],
   props: {
     total: Number,

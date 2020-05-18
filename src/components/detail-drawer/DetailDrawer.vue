@@ -1,15 +1,19 @@
 <template>
   <el-drawer
     title="照片详情"
-    size="500px"
+    size="600px"
     :visible.sync="visible"
     direction="rtl"
     :modal="false"
     @closed="onClose"
     class="photo-detail-drawer">
     <div class="detail-cont">
-      <el-image :src="fileMinUrlPath"
-                fit="contain"></el-image>
+      <el-image :src="fileUrlPath"
+                fit="contain">
+        <div slot="placeholder" class="image-slot">
+          <i class="el-icon-loading"></i>
+        </div>
+      </el-image>
       <el-tabs v-model="activeName"
                type="card"
                @tab-click="handleClick"
@@ -20,7 +24,7 @@
               <i class="icon-label el-icon-picture-outline"></i>
             </el-tooltip>
           </span>
-          <el-form label-position="left" class="demo-table-expand">
+          <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="名称">
               <span>{{ detailData.photoName || '暂无' }}</span>
               <el-popover placement="top"
@@ -28,7 +32,7 @@
                           v-model="nameEditPopVisible">
                 <el-input v-model.trim="photoNameValue"
                           placeholder="请输入照片名称"
-                          maxlength="20"
+                          maxlength="100"
                           size="small">
                 </el-input>
                 <div style="text-align: right; margin-top: 10px">
@@ -83,21 +87,27 @@
               <i class="icon-label el-icon-document"></i>
             </el-tooltip>
           </span>
-          <el-form label-position="left" class="demo-table-expand">
-            <el-form-item label="文件名">
+          <el-form label-position="left" class="detail-form-cont">
+            <!-- <el-form-item label="文件名">
               <span>{{ detailData.fileName || '暂无' }}</span>
+            </el-form-item> -->
+            <el-form-item label="文件名">
+              <span>{{ detailData.photoName || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="拍摄日期">
-              <span>{{ detailData.photoTime || '暂无' }}</span>
+              <span>{{ detailData.photoTime | formatDate}}</span>
             </el-form-item>
             <el-form-item label="上传日期">
-              <span>{{ detailData.photoUploadTime || '暂无' }}</span>
+              <span>{{ detailData.photoUploadTime | formatDate}}</span>
             </el-form-item>
             <el-form-item label="文件大小">
-              <span>{{ detailData.photoSize || '暂无' }}</span>
+              <span>{{ detailData.photoSize + ' b' || '暂无' }}</span>
             </el-form-item>
-            <el-form-item label="影像大小">
-              <span>{{ detailData.photoPixelX }} * {{ detailData.photoPixelY }}</span>
+            <el-form-item label="X分辨率">
+              <span>{{ detailData.photoPixelX + ' 像素' || '暂无' }}</span>
+            </el-form-item>
+            <el-form-item label="Y分辨率">
+              <span>{{ detailData.photoPixelY + ' 像素' || '暂无' }}</span>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -107,7 +117,7 @@
               <i class="icon-label el-icon-camera"></i>
             </el-tooltip>
           </span>
-          <el-form label-position="left" class="demo-table-expand">
+          <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="照相机制造商">
               <span>{{ detailData.cameraMaker || '暂无' }}</span>
             </el-form-item>
@@ -125,7 +135,7 @@
               <i class="icon-label el-icon-video-camera"></i>
             </el-tooltip>
           </span>
-          <el-form label-position="left" class="demo-table-expand">
+          <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="光圈">
               <span>{{ detailData.cameraAperture || '暂无' }}</span>
             </el-form-item>
@@ -156,11 +166,11 @@
             <el-form-item label="闪光灯">
               <span>{{ detailData.flash || '暂无' }}</span>
             </el-form-item>
-            <el-form-item label="动态D-Lighting">
-              <span>{{ detailData.DLighting || '暂无' }}</span>
-            </el-form-item>
             <el-form-item label="优化校准">
               <span>{{ detailData.orientation || '暂无' }}</span>
+            </el-form-item>
+            <el-form-item label-width="126px" label="动态D-Lighting">
+              <span>{{ detailData.DLighting || '暂无' }}</span>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -170,7 +180,7 @@
               <i class="icon-label el-icon-location-information"></i>
             </el-tooltip>
           </span>
-          <el-form label-position="left" class="demo-table-expand">
+          <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="地点全称">
               <span>{{ detailData.photo_place || '暂无' }}</span> <!-- TODO: 后续确认 photo_place是这个还是方位 -->
             </el-form-item>
@@ -205,6 +215,15 @@ import { photoService, tagService } from '@/request/services'
 import detailMixin from '@/core/mixins/detailMixin'
 
 export default {
+  filters: {
+    formatDate(val) {
+      if (val) {
+        console.log('moent',$moment(val, $moment.HTML5_FMT.DATETIME_LOCAL_MS))
+        return $moment(val, $moment.HTML5_FMT.DATETIME_LOCAL_MS).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss')
+
+      } else return '暂无'
+    }
+  },
   mixins: [ detailMixin ],
   data() {
     return {
@@ -243,6 +262,7 @@ export default {
         this.$message.success('修改成功')
         this.nameEditPopVisible = false
         this._getDetail()
+        this.$bus.$emit('flashContent')
       } else {
         this.nameEditPopVisible = false
       }
@@ -300,7 +320,7 @@ export default {
         photoId: this.photoId
       })
       console.log(res)
-      this.detailData = res.data.data
+      this.detailData = res.data
       this.photoNameValue = this.detailData.photoName
       this.loading = false
     }
@@ -325,14 +345,19 @@ export default {
   .detail-cont {
     padding: 0 20px 20px 20px;
     .el-image {
-      height: 340px;
-      min-width: 450px;
-      margin-bottom: 5px;
+      height: 300px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .detail-form-cont {
+      height: 353px;
+      overflow: auto;
     }
   }
 
   .icon-label {
     font-size: 18px;
+    padding: 0 10px;
   }
 
   .el-tag {

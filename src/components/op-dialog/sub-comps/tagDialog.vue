@@ -7,7 +7,7 @@
     class="tag-dialog">
     <div>
       <el-checkbox-group v-model="tagValue" size="small" v-loading="loading">
-        <el-checkbox-button v-for="tag in filter.tags" :label="tag.value" :key="tag.value">{{tag.label}}</el-checkbox-button>
+        <el-checkbox-button v-for="tag in filter.tags" :label="tag.id" :key="tag.id">{{tag.name}}</el-checkbox-button>
         <div class="ib" v-if="inputVisible">
           <el-input
             class="input-new-tag"
@@ -73,7 +73,7 @@ export default {
     },
     async createTagRequest() {
       await tagService.createTag({
-        name: this.inputValue
+        tagName: this.inputValue
       })
     },
     async setTagsRequest() {

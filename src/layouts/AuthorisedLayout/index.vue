@@ -6,10 +6,13 @@
         router
         :default-active="defaultActive"
         :default-openeds="['photo-menu', 'album-menu']"
-        :collapse="isCollapse">
-        <!-- @open="handleOpen"
-          @close="handleClose"> -->
-        <div class="logo-wrap"><the-logo /></div>
+        :collapse="isCollapse"
+        background-color="#181b24"
+        text-color="#FFFFFF"
+        active-text-color="#409EFF">
+        <!-- @open="logoType = 'white'"
+        @close="logoType = 'no-text'" -->
+        <div class="logo-wrap"><the-logo :type="isCollapse ? 'no-text' : 'white'" /></div>
         <!-- 相片菜单 -->
         <el-submenu index="photo-menu">
           <template slot="title">
@@ -96,13 +99,13 @@
 
     <el-container>
       <!-- 顶栏 -->
-      <el-header>
+      <el-header height="40px">
         <div class="collapse-btn" @click="isCollapse = !isCollapse">
           <i :class="isCollapse? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
         </div>
-        <div class="search-wrap">
+        <!-- <div class="search-wrap">
           <el-input size="small" v-model="searchKey" placeholder="请输入照片、相册名称..."></el-input>
-        </div>
+        </div> -->
         <div class="account-wrap">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
@@ -153,14 +156,14 @@ export default {
     return {
       isCollapse: false,
       routes: this.$router.options.routes[0].children[0].children,
-      searchKey: '',
       allChecked: false,
       footerVisible: false,
       albumPopVisible: false,
       albumForm: {
         name: ''
       },
-      defaultActive: ''
+      defaultActive: '',
+      logoType: 'white'
     }
   },
   computed: {
@@ -279,20 +282,31 @@ export default {
 }
 
 .el-menu:not(.el-menu--collapse) {
-  width: 200px
+  width: 220px
 }
 
 .logo-wrap {
-  height: 45px;
-  width: 150px;
-  margin: 10px auto;
+  margin-top: 10px;
 }
 
 .el-aside {
+  /deep/ .el-submenu {
+    overflow: hidden;
+  }
   .photo-date-tree {
       height: auto;
       padding: 0 !important;
       margin-left: 44px;
+      .el-tree {
+        background-color: $background-color-menu;
+        color: $color-white;
+      }
+      /deep/ .el-tree-node__content:hover {
+        background-color: $background-color-menu-hover;
+      }
+      /deep/ .el-tree-node:focus > .el-tree-node__content {
+        background-color: $background-color-menu;
+      }
   }
 }
 
@@ -304,16 +318,16 @@ export default {
   background-color: $color-white;
 
   .collapse-btn {
-    font-size: 27px;
-    color: $color-text-placeholder;
+    font-size: 18px;
+    color: $color-text-secondary;
     cursor: pointer;
   }
 
-  .search-wrap {
-    width: 240px;
-    margin-left: auto;
-    margin-right: 20px;
-  }
+  // .search-wrap {
+  //   width: 240px;
+  //   margin-left: auto;
+  //   margin-right: 20px;
+  // }
 }
 
 .el-main {

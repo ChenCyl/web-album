@@ -88,17 +88,25 @@ export default new Vuex.Store({
     // 获取所有照片中选择器的选项数据
     async fetchFilter({ commit }) {
       let res = await photoService.getFilter()
+      console.log('ssss',res)
+
       commit('updateFilter', {
-        albums: res.data.albums || [],
-        dates: res.data.dates || [],
-        cameras: res.data.cameras || [],
-        tags: res.data.tags || []
+        albums: res.data.albums.filter((item, i, arr) => {
+          if (!item) {
+            return false
+          } else if (arr.findIndex(item2 => item2.id === item.id) !== i) {
+            return false
+          } return true
+        }) || [],
+        dates: res.data.dates.filter(item => item) || [],
+        cameras: res.data.cameras.filter(item => item) || [],
+        tags: res.data.tags.filter(item => item) || []
       })
     },
     // 获取所有相册 用于侧边栏
     async fetchAlbums({ commit }) {
       let res = await albumService.getAlbums()
-      commit('updateAlbums', res.data.data)
+      commit('updateAlbums', res.data)
     }
   },
   modules: {

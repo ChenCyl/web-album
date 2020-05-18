@@ -10,6 +10,7 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     userName: ''
+    // userAccount: ''
     // avatar: ''
   }
 }
@@ -26,6 +27,9 @@ const mutations = {
   SET_NAME: (state, userName) => {
     state.userName = userName
   }
+  // SET_ACCOUNT: (state, userAccount) => {
+  //   state.userAccount = userAccount
+  // }
   // SET_AVATAR: (state, avatar) => {
   //   state.avatar = avatar
   // }
@@ -34,13 +38,15 @@ const mutations = {
 const actions = {
   // user userService.
   login({ commit }, userInfo) {
-    const { userName, password } = userInfo
+    const { userAccount, userPwd } = userInfo
     return new Promise((resolve, reject) => {
-      userService.login({ username: userName.trim(), password: password }).then(response => {
+      userService.login({ userAccount: userAccount.trim(), userPwd: userPwd }).then(response => {
+        console.log('sdfsd',response)
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        commit('SET_NAME', userName)
+        // commit('SET_TOKEN', data.token)
+        // setToken(data.token)
+        commit('SET_NAME', userAccount)
+        // commit('SET_NAME', username)
         resolve()
       }).catch(error => {
         reject(error)
@@ -59,9 +65,8 @@ const actions = {
           reject('Verification failed, please userService. again.')
         }
 
-        const { userName } = data.data // FIXME:
-
-        commit('SET_NAME', userName)
+        commit('SET_NAME', data)
+        console.log('setneame', data)
         // commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
@@ -96,7 +101,7 @@ const actions = {
   modifyPassword({ commit, state }, payload) {
     const { oldPassword, newPassword } = payload
     return userService.modifyPassword({
-      userName: state.userName,
+      userAccount: state.userName,
       oldPassword,
       newPassword
     })

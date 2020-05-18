@@ -43,9 +43,9 @@
                  @change="handleChange">
         <el-option
           v-for="item in cameraOptions"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id">
+          :key="item"
+          :label="item"
+          :value="item">
         </el-option>
       </el-select>
     </div>
@@ -161,5 +161,9 @@ export default {
   width: 56px;
   text-align-last: justify;
   margin-right: 15px;
+}
+
+.el-select {
+  width: 220px;
 }
 </style>

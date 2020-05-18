@@ -3,8 +3,8 @@
     <el-link @click="goLogin"
              :underline="false"
              class="back-btn el-icon-video-play"></el-link>
-    <div class="logo">logo</div>
-    <div class="title">注册账号</div>
+    <div class="logo"><the-logo /></div>
+    <div class="title">注 册</div>
     <div class="input-wrap">
       <el-form :model="registerForm"
                ref="registerForm"
@@ -55,8 +55,13 @@
 
 import validator from '@/utils/validate'
 import { userService } from '@/request/services'
+import { getuuid } from '@/utils/uuid'
+import theLogo from '@/components/the-logo'
 
 export default {
+  components: {
+    theLogo
+  },
   data() {
     const accountValidator = (rule, value, callback) => {
       if (value === '') {
@@ -117,8 +122,10 @@ export default {
       this.$refs.registerForm.validate(async (valid) => {
         if (valid) {
           await userService.register({
-            userName: this.registerForm.account,
-            password: this.registerForm.password
+            // username: 'USER' + getuuid(),
+            username: this.registerForm.account,
+            userAccount: this.registerForm.account,
+            userPwd: this.registerForm.password
           })
           this.$message.success("注册成功")
           this.$router.push('/login')

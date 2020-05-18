@@ -41,8 +41,8 @@ export default {
       this.$router.push({
         name: 'photo-camera-photo',
         query: {
-          id: val.id,
-          name: val.name
+          id: val.cameraName
+          // name: val.name
         }
       })
     },
@@ -61,8 +61,11 @@ export default {
           page: this.currentPage,
           size: this.pageSize
         })
-        this.pageOptions = res.data.data.data
-        this.total = res.data.data.number
+        console.log('res', res)
+        // this.pageOptions = res.data.data // TODO: 不做分页？
+        // this.total = res.data.number
+        this.pageOptions = res.data
+        this.total = res.data.length
         this.loading = false
       } catch (err) {
         this.loading = false

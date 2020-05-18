@@ -79,8 +79,8 @@ export default {
           order: this.orderValue,
           keyword: this.searchKey
         })
-        this.pageOptions = res.data.data.data
-        this.total = res.data.data.number
+        this.pageOptions = res.data.data
+        this.total = res.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

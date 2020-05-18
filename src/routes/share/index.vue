@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -42,9 +42,9 @@ export default {
   computed: {
     ...mapState('share', ['share'])
   },
-  created() {
+  async created() {
     const uuid = this.$route.params.id
-    this.removeExpirePhoto()
+    await this.getAllShare()
     if (this.share[uuid]) {
       this.shareData = this.share[uuid]
       console.log('shareData', this.shareData)
@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('share', ['removeExpirePhoto'])
+    ...mapActions('share', ['getAllShare'])
   }
 }
 </script>

@@ -1,57 +1,66 @@
 <template>
   <div class="content with-shadow">
-    <!-- 图片操作区 -->
-    <div class="op-cont typo-base">
-      <div class="total">
-        共 <span class="highlight">{{ total }}</span> 种相机
-      </div>
-      <div class="op">
-        <div class="search">
-          <el-input size="small" placeholder="输入相机名称"></el-input>
+    <div v-if="pageOptions && pageOptions.length === 0">
+      <no-content />
+    </div>
+    <template v-else>
+      <!-- 图片操作区 -->
+      <div class="op-cont typo-base">
+        <div class="total">
+          共 <span class="highlight">{{ total }}</span> 种相机
         </div>
-        <el-tooltip content="切换视图" placement="top" effect="light">
-          <div class="switch-display el-icon-set-up text-btn"></div>
-        </el-tooltip>
+        <div class="op">
+          <div class="search">
+            <el-input size="small" placeholder="输入相机名称"></el-input>
+          </div>
+          <el-tooltip content="切换视图" placement="top" effect="light">
+            <div class="switch-display el-icon-set-up text-btn"></div>
+          </el-tooltip>
+        </div>
       </div>
-    </div>
-    <!-- 表格区 -->
-    <div class="table-cont" v-loading="loading">
-      <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
-      <el-table
-        ref="multipleTable"
-        :data="pageOptions"
-        tooltip-effect="dark"
-        @selection-change="handleSelectionChange"
-        @row-click="handleRowClick"
-        style="width: 100%"
-        header-row-class-name="table-head"
-        stripe>
-        <template v-if="from === 'camera'">
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="name" label="照相机" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="num" label="相片数量"></el-table-column>
-          <el-table-column prop="latest_ptitle" label="最新上传" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="latest_date" label="最新上传时间" show-overflow-tooltip></el-table-column>
-        </template>
-      </el-table>
-    </div>
-    <!-- 分页 -->
-    <el-pagination background
-                   @size-change="handleSizeChange"
-                   @current-change="handleCurrentChange"
-                   :current-page="currentPage"
-                   :page-sizes="[20, 40, 80]"
-                   :page-size="pageSize"
-                   layout="sizes, prev, pager, next, jumper"
-                   :total="total">
-    </el-pagination>
+      <!-- 表格区 -->
+      <div class="table-cont" v-loading="loading">
+        <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
+        <el-table
+          ref="multipleTable"
+          :data="pageOptions"
+          tooltip-effect="dark"
+          @selection-change="handleSelectionChange"
+          @row-click="handleRowClick"
+          style="width: 100%"
+          header-row-class-name="table-head"
+          stripe>
+          <template v-if="from === 'camera'">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="cameraName" label="照相机" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="num" label="相片数量"></el-table-column>
+            <el-table-column prop="latestPtitle" label="最新上传" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="latestDate" label="最新上传时间" show-overflow-tooltip></el-table-column>
+          </template>
+        </el-table>
+      </div>
+      <!-- 分页 -->
+      <el-pagination background
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[20, 40, 80]"
+                     :page-size="pageSize"
+                     layout="sizes, prev, pager, next, jumper"
+                     :total="total">
+      </el-pagination>
+    </template>
   </div>
 </template>
 
 <script>
 import footerMixin from '@/core/mixins/footerMixin'
+import NoContent from '@/components/no-content'
 
 export default {
+  components: {
+    NoContent
+  },
   mixins: [ footerMixin ],
   props: {
     total: Number,

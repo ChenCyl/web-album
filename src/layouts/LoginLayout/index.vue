@@ -22,7 +22,10 @@ export default {
   height: 100%;
   .left-area {
     flex: 1;
-    background: green;
+    background-image: url(./img/login-page-pic.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: center;
   }
   .right-area {
     flex-basis: 500px;

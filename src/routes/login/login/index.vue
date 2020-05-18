@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
-    <div class="logo">logo</div>
-    <div class="title">账号登陆</div>
+    <div class="logo"><the-logo /></div>
+    <div class="title">登 录</div>
     <div class="input-wrap">
       <el-form :model="loginForm" ref="loginForm" :rules="rules">
         <el-form-item prop="account">
@@ -32,8 +32,13 @@
 
 import validator from '@/utils/validate'
 import { mapActions } from 'vuex'
+import theLogo from '@/components/the-logo'
+
 
 export default {
+  components: {
+    theLogo
+  },
   data() {
     function accountValidator(rule, value, callback) {
       if (value === '') {
@@ -74,8 +79,8 @@ export default {
       this.$refs.loginForm.validate(async (valid) => {
         if (valid) {
           await this.login({
-            userName: this.loginForm.account,
-            password: this.loginForm.password
+            userAccount: this.loginForm.account,
+            userPwd: this.loginForm.password
           })
           if (this.$route.query && this.$route.query.redirect) {
             this.$router.push(this.$route.query.redirect)

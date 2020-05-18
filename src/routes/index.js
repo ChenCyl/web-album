@@ -13,6 +13,7 @@ const routes = [
   {
     path: '/',
     component: layouts.DefaultLayout,
+    redirect: '/photo',
     children: [
       home,
       login,

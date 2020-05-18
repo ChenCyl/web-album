@@ -4,7 +4,7 @@
 
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ name: 'photo-camera-index' }">相机列表</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ $route.query.name || ''}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $route.query.id || ''}}</el-breadcrumb-item>
     </el-breadcrumb>
 
     <main-content :pageOptions="pageOptions"
@@ -73,8 +73,8 @@ export default {
           order: this.orderValue,
           keyword: this.searchKey
         })
-        this.pageOptions = res.data.data.data
-        this.total = res.data.data.number
+        this.pageOptions = res.data.data
+        this.total = res.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

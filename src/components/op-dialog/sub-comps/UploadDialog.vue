@@ -2,21 +2,21 @@
   <el-dialog
     title="上传照片"
     :visible.sync="dVisible"
-    width="830px"
     :before-close="handleClose"
     class="upload-dialog">
     <el-upload
+      name="imgInput"
+      :with-credentials="true"
       class="upload-demo"
-      action="http://120.26.186.13:9099/mock/13/upload"
+      action="http://116.62.152.21:8080/api/uploadphoto"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :on-success="handleSuccess"
       :file-list="fileList"
-      :data="uploadCdt"
       list-type="picture-card"
       multiple>
       <i class="el-icon-plus"></i>
-      <div class="el-upload__tip" slot="tip">支持的文件类型：JPEG、RAW (NEF/NRW)、TIFF、MOV、AVI、MP4、WAV、NMS、MPO</div>
+      <div class="el-upload__tip" slot="tip">支持的文件类型：JPEG、JPG、PNG、RAW (NEF/NRW)、TIFF、NMS、MPO</div>
     </el-upload>
     <el-dialog :visible.sync="viewerVisible">
       <img width="100%" :src="viewerImageUrl" alt="">
@@ -44,8 +44,17 @@ export default {
   created() {
   },
   methods: {
-    handleSuccess(response, file, fileList) {
-      console.log('upload success file', file)
+    async handleSuccess(response, file, fileList) {
+      console.log('upload success file', response)
+      if (this.uploadCdt.albumId) {
+        await photoService.addToAlbum({
+          albumId: this.uploadCdt.albumId,
+          photoIds: [response.data.number]
+        })
+      }
+      photoService.addPhoto({
+        fileList: [response.data.number]
+      })
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)
