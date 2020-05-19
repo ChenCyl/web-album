@@ -1,5 +1,5 @@
 <template>
-  <div class="content with-shadow">
+  <div class="content with-shadow" v-loading="loading">
     <div v-if="pageOptions && pageOptions.length === 0">
       <no-content />
     </div>
@@ -35,9 +35,14 @@
         </div>
       </div>
       <!-- 图片陈列区 -->
-      <div class="photo-cont" v-loading="loading">
+      <div class="photo-cont">
         <!-- NOTE: handleCheckedOptionsChange 命名不可更改 -->
-        <el-checkbox-group v-model="checkedOptions" @change="handleCheckedOptionsChange">
+        <el-checkbox-group v-model="checkedOptions"
+                           @change="handleCheckedOptionsChange"
+                           v-viewer="{
+                             title: false,
+                             url: 'data-src'
+                           }">
           <div v-for="option in pageOptions"
                :key="option.photoId"
                :class="{
@@ -66,7 +71,7 @@
               <el-image style="width: 150px; height: 140px"
                         :src="option.fileMinUrlPath"
                         fit="contain"
-                        :preview-src-list="[option.fileUrlPath]"></el-image>
+                        :data-src="option.fileUrlPath"></el-image>
             <!-- FIXME: fileMinUrlPath => fileUrlPath -->
             </div>
             <div class="title-wrap typo-base">

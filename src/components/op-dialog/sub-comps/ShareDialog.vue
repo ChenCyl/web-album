@@ -5,14 +5,17 @@
     width="350px"
     :before-close="handleClose"
     class="rate-dialog">
-    <el-form ref="form" :model="form" label-width="70px">
+    <el-form ref="form"
+             :model="form"
+             label-width="70px"
+             label-position="left">
       <el-form-item label="分享主题">
-        <el-input v-model.trim="form.title"
+        <el-input v-model="form.title"
                   size="small"
                   maxlength="20"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="介绍">
+      <el-form-item label="介绍语">
         <el-input type="textarea"
                   v-model="form.intro"
                   size="small"

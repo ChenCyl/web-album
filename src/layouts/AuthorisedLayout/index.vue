@@ -128,10 +128,10 @@
         <el-footer v-if="footerVisible">
           <el-checkbox v-model="allChecked" @change="handleCheckAllChange">全选</el-checkbox>
           <div class="config-wrap">
-            <el-button type="text" @click="addToAblum" icon="el-icon-files">添加到相册</el-button>
-            <el-button type="text" @click="addRate" icon="el-icon-star-off">添加等级</el-button>
-            <el-button type="text" @click="addTag" icon="el-icon-price-tag">添加标签</el-button>
-            <el-button type="text" @click="playCarousel" icon="el-icon-data-board">幻灯片</el-button>
+            <el-button type="text" @click="addToAblum" icon="el-icon-files">移动到相册</el-button>
+            <el-button type="text" @click="addRate" icon="el-icon-star-off">设置等级</el-button>
+            <el-button type="text" @click="addTag" icon="el-icon-price-tag">设置标签</el-button>
+            <!-- <el-button type="text" @click="playCarousel" icon="el-icon-data-board">幻灯片</el-button> -->
             <el-button type="text" @click="share" icon="el-icon-share">分享</el-button>
             <el-button type="text" @click="download" icon="el-icon-download">下载</el-button>
             <el-button type="text" @click="deletePhotos" icon="el-icon-close">删除</el-button>
@@ -147,6 +147,7 @@
 import theLogo from '@/components/the-logo'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { albumService } from '@/request/services'
+import { downloadImg } from '@/utils/downloadImg'
 
 export default {
   components: {
@@ -167,7 +168,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['dateTree', 'albums']),
+    ...mapState(['dateTree', 'albums', 'checkedOptionsCopy']),
     ...mapState('user', ['userName'])
   },
   watch: {
@@ -229,25 +230,56 @@ export default {
       done()
     },
     addToAblum() {
-      this.$dialog('album')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        this.$dialog('album')
+      }
     },
     addRate() {
-      this.$dialog('rate')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        this.$dialog('rate')
+      }
     },
     addTag() {
-      this.$dialog('tag')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        this.$dialog('tag')
+      }
     },
     playCarousel() {
       this.$dialog('carousel')
     },
     share() {
-      this.$dialog('share')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        this.$dialog('share')
+      }
     },
     download() {
-      this.$dialog('download')
+      // this.$dialog('download')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        let i = this.checkedOptionsCopy.length
+        let noti1 = this.$notify({
+          title: '下载照片',
+          message: '正在下载，请耐心等待...',
+          duration: 0
+        })
+        this.checkedOptionsCopy.forEach(item => {
+          downloadImg(item.fileUrlPath, item.photoName).then(()=>{
+            i--
+            if (i === 0) {
+              noti1.close()
+              this.$notify({
+                title: '下载照片',
+                message: '下载成功',
+                type: 'success'
+              })
+            }
+          })
+        })
+      }
     },
     deletePhotos() {
-      this.$dialog('delete')
+      if (this.checkedOptionsCopy && this.checkedOptionsCopy.length > 0) {
+        this.$dialog('delete')
+      }
     },
     // 新增相册
     saveAlbumRequest() {
@@ -331,7 +363,7 @@ export default {
 }
 
 .el-main {
-  // background-color: $background-color-base;
+  overflow-x: hidden;
 }
 
 .el-footer {

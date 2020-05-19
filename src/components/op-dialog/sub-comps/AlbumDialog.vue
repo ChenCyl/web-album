@@ -9,7 +9,7 @@
       <el-radio v-for="album in albums" :key="album.albumId" :label="album.albumId">
         <div class="ib va-m">
           <div class="name single-ellipsis" :title="album.albumName">{{ album.albumName }}</div>
-          <div>{{`(${album.size})`}}</div>
+          <div v-if="album.size || album.size === 0">{{`(${album.size})`}}</div>
         </div>
       </el-radio>
     </el-radio-group>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { photoService } from '@/request/services'
 import dialogMixin from '@/core/mixins/dialogMixin'
 
@@ -34,10 +34,20 @@ export default {
   },
   computed: {
     ...mapState(['albums', 'checkedOptionsCopy'])
+    // albumsWithNoItem() {
+    //   return [
+    //     {
+    //       albumId: -1,
+    //       albumName: '不添加到任何一个相册中'
+    //     },
+    //     ...this.albums
+    //   ]
+    // }
   },
   created() {
   },
   methods: {
+    ...mapActions(['fetchAlbums', 'fetchFilter']),
     handleClose(done) {
       done()
     },
@@ -45,11 +55,13 @@ export default {
       if (this.albumValue) {
         await photoService.addToAlbum({
           albumId: this.albumValue,
-          photoIds: this.params.album ? [this.params.photoId] : this.checkedOptionsCopy.map(item => item.photoId)
+          photoIds: this.params.photoId ? [this.params.photoId] : this.checkedOptionsCopy.map(item => item.photoId)
         })
         this.$message.success('操作成功')
         this.dVisible = false
-        this.$bus.$emit(this.params.album ? 'flashDetail' : 'flashContent')
+        this.$bus.$emit(this.params.photoId ? 'flashDetail' : 'flashContent')
+        this.fetchAlbums()
+        this.fetchFilter()
       } else {
         this.$message.warning('请选择相册')
       }

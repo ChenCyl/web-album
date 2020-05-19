@@ -4,7 +4,7 @@
     <div class="select-wrap">
       <div class="label typo-base">相册</div>
       <el-select v-model="albumValue"
-                 placeholder="请选择"
+                 placeholder="请选择相册"
                  size="small"
                  multiple
                  clearable
@@ -25,7 +25,7 @@
         size="small"
         v-model="dateValue"
         type="dates"
-        placeholder="选择一个或多个日期"
+        placeholder="选择一个或多个拍摄日期"
         :picker-options="datePickerOptions"
         value-format="yyyy-MM-dd"
         @change="handleChange">
@@ -35,7 +35,7 @@
     <div class="select-wrap">
       <div class="label typo-base">照相机</div>
       <el-select v-model="cameraValue"
-                 placeholder="请选择"
+                 placeholder="请选择照相机"
                  size="small"
                  multiple
                  clearable
@@ -53,7 +53,7 @@
     <div class="select-wrap">
       <div class="label typo-base">等级</div>
       <el-select v-model="rateValue"
-                 placeholder="请选择"
+                 placeholder="请选择等级"
                  size="small"
                  multiple
                  clearable
@@ -74,7 +74,7 @@
     <div class="select-wrap">
       <div class="label typo-base">标签</div>
       <el-select v-model="tagValue"
-                 placeholder="请选择"
+                 placeholder="请选择标签"
                  size="small"
                  multiple
                  clearable

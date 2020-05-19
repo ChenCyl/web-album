@@ -33,7 +33,7 @@ export default {
   props: {
     title: String,
     intro: String,
-    albumId: String
+    albumId: [String, Number]
   },
   methods: {
     ...mapMutations(['updateUploadCdt']),

@@ -1,14 +1,14 @@
 <template>
   <el-drawer
     title="照片详情"
-    size="600px"
+    size="550px"
     :visible.sync="visible"
     direction="rtl"
     :modal="false"
     @closed="onClose"
     class="photo-detail-drawer">
     <div class="detail-cont">
-      <el-image :src="fileUrlPath"
+      <el-image :src="fileMinUrlPath"
                 fit="contain">
         <div slot="placeholder" class="image-slot">
           <i class="el-icon-loading"></i>
@@ -56,15 +56,21 @@
               <el-button type="text" @click="editRate(detailData.photoScore)" icon="el-icon-edit"></el-button>
             </el-form-item>
             <el-form-item label="标签">
-              <el-tag
-                :key="tag.id"
-                v-for="tag in detailData.tagList"
-                closable
-                :disable-transitions="false"
-                @close="handleDeleteTag(tag.id)">
-                {{ tag.name }}
-              </el-tag>
-              <div class="ib" v-if="createTagVisible">
+              <template v-if="detailData.tagList && detailData.tagList.length === 0">
+                <span>暂无</span>
+              </template>
+              <template v-else>
+                <el-tag
+                  :key="tag.id"
+                  v-for="tag in detailData.tagList"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleDeleteTag(tag.id)">
+                  {{ tag.name }}
+                </el-tag>
+              </template>
+              <el-button type="text" @click="editTag(detailData.tagList)" icon="el-icon-edit"></el-button>
+              <!-- <div class="ib" v-if="createTagVisible">
                 <el-input
                   class="input-new-tag"
                   v-model="createTagValue"
@@ -73,11 +79,11 @@
                   @keyup.enter.native="handleCreateTagComfirm">
                 </el-input>
                 <el-button type="text" size="mini" @click="handleCreateTagComfirm">确认</el-button>
-              </div>
-              <el-button v-else
+              </div> -->
+              <!-- <el-button v-else
                          class="button-new-tag"
                          size="small"
-                         @click="showCreateTagInput">+新建标签</el-button>
+                         @click="showCreateTagInput">+新建标签</el-button> -->
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -95,10 +101,10 @@
               <span>{{ detailData.photoName || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="拍摄日期">
-              <span>{{ detailData.photoTime | formatDate}}</span>
+              <span>{{ detailData.photoTime | formatPhotoDate}}</span>
             </el-form-item>
             <el-form-item label="上传日期">
-              <span>{{ detailData.photoUploadTime | formatDate}}</span>
+              <span>{{ detailData.photoUploadTime | formatUploadDate}}</span>
             </el-form-item>
             <el-form-item label="文件大小">
               <span>{{ detailData.photoSize + ' b' || '暂无' }}</span>
@@ -146,7 +152,7 @@
               <span>{{ detailData.focusLength || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="ISO感光度">
-              <span>{{ detailData.ISO || '暂无' }}</span>
+              <span>{{ detailData.iso || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="曝光补偿">
               <span>{{ detailData.exposureCompensation || '暂无' }}</span>
@@ -158,7 +164,7 @@
               <span>{{ detailData.AFAreaMode || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="测光">
-              <span>{{ detailData.meteringMode || '暂无' }}</span>
+              <span>{{ detailData.photometry || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="白平衡">
               <span>{{ detailData.whiteBalance || '暂无' }}</span>
@@ -182,7 +188,7 @@
           </span>
           <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="地点全称">
-              <span>{{ detailData.photo_place || '暂无' }}</span> <!-- TODO: 后续确认 photo_place是这个还是方位 -->
+              <span>{{ detailData.photoPlace || '暂无' }}</span> <!-- TODO: 后续确认 photo_place是这个还是方位 -->
             </el-form-item>
             <el-form-item label="纬度">
               <span>{{ detailData.latitude || '暂无' }}</span>
@@ -194,7 +200,7 @@
               <span>{{ detailData.altitude || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="方位">
-              <span>{{ detailData.name || '暂无' }}</span>
+              <span>{{ detailData.direction || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="POI">
               <span>{{ detailData.name || '暂无' }}</span>
@@ -216,11 +222,14 @@ import detailMixin from '@/core/mixins/detailMixin'
 
 export default {
   filters: {
-    formatDate(val) {
+    formatPhotoDate(val) {
       if (val) {
-        console.log('moent',$moment(val, $moment.HTML5_FMT.DATETIME_LOCAL_MS))
         return $moment(val, $moment.HTML5_FMT.DATETIME_LOCAL_MS).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss')
-
+      } else return '暂无'
+    },
+    formatUploadDate(val) {
+      if (val) {
+        return $moment(val, $moment.HTML5_FMT.DATETIME_LOCAL_MS).subtract(5, 'hours').format('YYYY-MM-DD HH:mm:ss')
       } else return '暂无'
     }
   },
@@ -234,8 +243,8 @@ export default {
       // photoId
       // fileUrlPath
       // fileMinUrlPath
-      createTagVisible: false,
-      createTagValue: '',
+      // createTagVisible: false,
+      // createTagValue: '',
       loading: false,
       photoNameValue: '',
       nameEditPopVisible: false
@@ -285,6 +294,15 @@ export default {
         }
       })
     },
+    editTag(tagList) {
+      this.$dialog({
+        message: 'tag',
+        params: {
+          tagList,
+          photoId: this.photoId
+        }
+      })
+    },
     async handleDeleteTag(tagId) {
       await tagService.removeTag({
         photoId: this.photoId,
@@ -292,26 +310,26 @@ export default {
       })
       this._getDetail()
     },
-    async handleCreateTagComfirm() {
-      if (this.createTagValue) {
-        let res = await tagService.createTag({
-          tagName: this.createTagValue
-        })
-        let newTagId = res.data.tagId
-        await tagService.setTags({
-          photoIds: [this.photoId],
-          tagIds: [...this.detailData.tagList.map(item=>item.id), newTagId]
-        })
-        this.createTagValue = ''
-        this.createTagVisible = false
-        this._getDetail()
-      } else {
-        this.createTagVisible = false
-      }
-    },
-    showCreateTagInput() {
-      this.createTagVisible = true
-    },
+    // async handleCreateTagComfirm() {
+    //   if (this.createTagValue) {
+    //     let res = await tagService.createTag({
+    //       tagName: this.createTagValue
+    //     })
+    //     let newTagId = res.data.tagId
+    //     await tagService.setTags({
+    //       photoIds: [this.photoId],
+    //       tagIds: [...this.detailData.tagList.map(item=>item.id), newTagId]
+    //     })
+    //     this.createTagValue = ''
+    //     this.createTagVisible = false
+    //     this._getDetail()
+    //   } else {
+    //     this.createTagVisible = false
+    //   }
+    // },
+    // showCreateTagInput() {
+    //   this.createTagVisible = true
+    // },
     handleClick() {
     },
     async _getDetail() {
@@ -345,13 +363,9 @@ export default {
   .detail-cont {
     padding: 0 20px 20px 20px;
     .el-image {
-      height: 300px;
+      height: 180px;
       width: 100%;
       margin-bottom: 15px;
-    }
-    .detail-form-cont {
-      height: 353px;
-      overflow: auto;
     }
   }
 

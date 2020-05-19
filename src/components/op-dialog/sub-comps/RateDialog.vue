@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="请评分"
+    title="请设置等级"
     :visible.sync="dVisible"
     width="350px"
     :before-close="handleClose"
@@ -37,7 +37,7 @@ export default {
       done()
     },
     async addRateRequest() {
-      if (this.params.rate) {
+      if (this.params.photoId) {
         this._singleAddRateRequest()
       } else {
         this._bashAddRateRequest()

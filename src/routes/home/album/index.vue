@@ -111,7 +111,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchAlbums']),
+    ...mapActions(['fetchAlbums', 'fetchFilter']),
     // 编辑相册名称
     saveAlbumRequest() {
       this.$refs.albumForm.validateField('name', async success => {
@@ -124,6 +124,7 @@ export default {
           this.albumPopVisible = false
           this.albumName = this.albumForm.name
           this.fetchAlbums()
+          this.fetchFilter()
         }
       })
     },
@@ -134,6 +135,7 @@ export default {
       })
       this.$message.success('删除成功')
       this.deletePopVisible = false
+      this.fetchFilter()
       await this.fetchAlbums()
       this.$router.push(`/album/${this.albums[0].albumId}`)
     },

@@ -8,7 +8,6 @@ const state = {
 const mutations = {
   updateShare(state, payload) {
     state.share[payload.uuid] = payload
-    console.log('state.share', state.share)
   },
   removeExpirePhoto(state) {
     let beDeleted = []
@@ -22,7 +21,7 @@ const mutations = {
 }
 
 const actions = {
-  createShareLink({ commit, state, rootState }, data) {
+  createShareLink({ commit, state, rootState, rootGetters }, data) {
     let uuid = getuuid()
     let link = 'http://localhost:8080/#/share/' + uuid  //FIXME:
     let now = $moment()
@@ -33,18 +32,29 @@ const actions = {
       intro: data.intro,
       uuid,
       link,
-      createTime: now.format('YYYY-MM-DD HH:mm'),
-      expireTime: now.add(3, 'days').format('YYYY-MM-DD HH:mm')  //FIXME:
+      createTime: now.format('YYYY-MM-DD HH:mm:ss'),
+      expireTime: now.add(3, 'days').format('YYYY-MM-DD HH:mm:ss'),
+      user: rootGetters.name
     })
     shareService.saveAllShare({
       data: JSON.stringify(state.share)
     })
     return link
   },
-  async getAllShare({ commit }) {
+  async getAllShare({ commit, state, rootGetters }) {
     let res = await shareService.getAllShare()
     state.share = JSON.parse(res.data)
     commit('removeExpirePhoto')
+    if (rootGetters.name) {
+      shareService.saveAllShare({
+        data: JSON.stringify(state.share)
+      })
+    }
+  },
+  async saveAllShare({ state }) {
+    return shareService.saveAllShare({
+      data: JSON.stringify(state.share)
+    })
   }
 }
 

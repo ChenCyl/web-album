@@ -46,15 +46,15 @@ export default {
   methods: {
     async handleSuccess(response, file, fileList) {
       console.log('upload success file', response)
+      await photoService.addPhoto({
+        fileList: [response.data.number]
+      })
       if (this.uploadCdt.albumId) {
         await photoService.addToAlbum({
-          albumId: this.uploadCdt.albumId,
+          albumId: +this.uploadCdt.albumId,
           photoIds: [response.data.number]
         })
       }
-      photoService.addPhoto({
-        fileList: [response.data.number]
-      })
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)

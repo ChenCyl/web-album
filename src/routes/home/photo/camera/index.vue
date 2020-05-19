@@ -62,10 +62,8 @@ export default {
           size: this.pageSize
         })
         console.log('res', res)
-        // this.pageOptions = res.data.data // TODO: 不做分页？
-        // this.total = res.data.number
-        this.pageOptions = res.data
-        this.total = res.data.length
+        this.pageOptions = res.data.data
+        this.total = res.data.number
         this.loading = false
       } catch (err) {
         this.loading = false

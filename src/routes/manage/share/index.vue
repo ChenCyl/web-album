@@ -12,14 +12,6 @@
           <div class="total">
             共 <span class="highlight">{{ shareData.length }}</span> 个分享链接
           </div>
-          <div class="op">
-            <div class="search">
-              <el-input size="small" placeholder="输入相机名称"></el-input>
-            </div>
-            <el-tooltip content="切换视图" placement="top" effect="light">
-              <div class="switch-display el-icon-set-up text-btn"></div>
-            </el-tooltip>
-          </div>
         </div>
         <!-- 表格区 -->
         <div class="table-cont">
@@ -29,10 +21,11 @@
             tooltip-effect="dark"
             style="width: 100%"
             header-row-class-name="table-head"
+            v-loading="loading"
             stripe>
             <template>
               <el-table-column prop="title" label="主题"></el-table-column>
-              <el-table-column prop="intro" label="介绍" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="intro" label="介绍语" show-overflow-tooltip></el-table-column>
               <el-table-column label="链接">
                 <template slot-scope="{ row }">
                   <span class="text-btn" @click="copyLink(row.link)">{{ row.link }}</span>
@@ -43,16 +36,26 @@
                   {{ row.photos.length }}
                 </template>
               </el-table-column>
-              <el-table-column prop="expireTime" label="有效期至"></el-table-column>
+              <el-table-column prop="expireTime" label="有效期至" min-width="150">
+                <template slot-scope="{ row }">
+                  <el-date-picker
+                    v-model="row.expireTime"
+                    size="mini"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    :clearable="false"
+                    @change="handleEdit(row)">
+                  </el-date-picker>
+                </template>
+              </el-table-column>
               <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                <template slot-scope="{ row }">
+                  <el-popconfirm
+                    title="确认删除？"
+                    @onConfirm="handleDelete(row)">
+                    <el-button  size="mini" type="danger" slot="reference">删除</el-button>
+                  </el-popconfirm>
                 </template>
               </el-table-column>
             </template>
@@ -76,23 +79,43 @@ export default {
   },
   data() {
     return {
-      shareData: []
+      shareData: [],
+      loading: false
     }
   },
   computed: {
     ...mapState('share', ['share'])
   },
   async mounted() {
+    this.loading = true
     await this.getAllShare()
     console.log('share', this.share)
     this.shareData = Object.values(this.share)
+    this.loading = false
   },
   methods: {
-    ...mapActions('share', ['getAllShare']),
+    ...mapActions('share', ['getAllShare', 'saveAllShare']),
     copyLink(text) {
       copy2Clip(text, () => {
         this.$message.success('成功复制到剪切板')
       })
+    },
+    async handleDelete(row) {
+      this.loading = true
+      delete this.share[row.uuid]
+      await this.saveAllShare()
+      this.shareData = Object.values(this.share)
+      this.loading = false
+      this.$message.success('删除成功')
+    },
+    async handleEdit(row) {
+      this.loading = true
+      console.log('eidt', row)
+      this.share[row.uuid] = row
+      await this.saveAllShare()
+      this.shareData = Object.values(this.share)
+      this.loading = false
+      this.$message.success('修改成功')
     }
   }
 }

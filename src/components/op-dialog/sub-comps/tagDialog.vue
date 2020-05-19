@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="请添加标签"
+    title="请设置标签"
     :visible.sync="dVisible"
     width="350px"
     :before-close="handleClose"
@@ -40,7 +40,7 @@ export default {
   mixins: [ dialogMixin ],
   data() {
     return {
-      tagValue: [],
+      tagValue: this.params.tagList ? this.params.tagList.map(item => item.id) : [],
       inputVisible: false,
       inputValue: '',
       loading: false
@@ -79,12 +79,13 @@ export default {
     async setTagsRequest() {
       if (this.tagValue.length) {
         await tagService.setTags({
-          photoIds: this.checkedOptionsCopy.map(item => item.photoId),
+          photoIds: this.params.photoId ? [this.params.photoId] : this.checkedOptionsCopy.map(item => item.photoId),
           tagIds: this.tagValue
         })
         this.$message.success('添加成功')
         this.dVisible = false
         this.$bus.$emit("flashContent")
+        this.$bus.$emit('flashDetail')
       } else {
         this.$message.warning("请选择标签")
       }

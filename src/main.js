@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'viewerjs/dist/viewer.css'
+import Viewer from 'v-viewer'
 import App from './App.vue'
 import router from './routes'
 import store from './store'
@@ -21,6 +23,7 @@ Vue.prototype.$dialog = OpDialog
 
 // 外部组件库
 Vue.use(ElementUI)
+Vue.use(Viewer)
 
 // 全局方法
 window.$moment = moment
