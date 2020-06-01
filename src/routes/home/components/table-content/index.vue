@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      orderValue: 'ptime_etf',
+      orderValue: 'utime_etf',
       orderOptions: $macro.ORDER_LIST,
       checkedOptions: [], // NOTE: 必须使用该命名
       currentPage: 1,
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     handleRowClick(row) {
-      console.log(row)
+      // console.log(row)
       this.$emit('handleRowClick', row)
     },
     handleSelectionChange(val) {

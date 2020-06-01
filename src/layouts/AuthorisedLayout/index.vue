@@ -5,7 +5,7 @@
       <el-menu
         router
         :default-active="defaultActive"
-        :default-openeds="['photo-menu', 'album-menu']"
+        :default-openeds="defaultOpeneds"
         :collapse="isCollapse"
         background-color="#181b24"
         text-color="#FFFFFF"
@@ -14,7 +14,7 @@
         @close="logoType = 'no-text'" -->
         <div class="logo-wrap"><the-logo :type="isCollapse ? 'no-text' : 'white'" /></div>
         <!-- 相片菜单 -->
-        <el-submenu index="photo-menu">
+        <el-submenu index="submenu-photo">
           <template slot="title">
             <i :class="routes[0].meta.icon"></i>
             <span>{{ routes[0].meta.title }}</span>
@@ -31,7 +31,7 @@
               </el-menu-item>
             </el-menu-item-group>
             <!-- 拍摄日期 -->
-            <el-submenu v-else-if="subRoute.name === 'photo-date'" :index="subRoute.name" :key="subRoute.name">
+            <el-submenu v-else-if="subRoute.name === 'photo-date'" index="submenu-date" :key="subRoute.name">
               <template slot="title">
                 <i :class="subRoute.meta.icon"></i>
                 <span>{{ subRoute.meta.title }}</span>
@@ -41,7 +41,8 @@
                   :data="dateTree"
                   node-key="fullDate"
                   show-checkbox
-                  @check="handleDateCheck">
+                  @check="handleDateCheck"
+                  ref="dateTree">
                 </el-tree>
               </el-menu-item>
             </el-submenu>
@@ -55,7 +56,7 @@
           </template>
         </el-submenu>
         <!-- 相册菜单 -->
-        <el-submenu index="album-menu">
+        <el-submenu index="submenu-album">
           <template slot="title">
             <i :class="routes[1].meta.icon"></i>
             <span>{{ routes[1].meta.title }}</span>
@@ -164,6 +165,7 @@ export default {
         name: ''
       },
       defaultActive: '',
+      defaultOpeneds: ['submenu-photo', 'submenu-album'], // FIX: 在这里赋值比在参数上直接赋值好的是可以解决不论如何都只打开那两个的问题
       logoType: 'white'
     }
   },
@@ -175,6 +177,10 @@ export default {
     $route: {
       handler(val) {
         this.defaultActive = val.path
+        if (val.path !== '/photo/date' && this.$refs.dateTree) {
+          // console.log('ref', this.$refs)
+          this.$refs.dateTree[0].setCheckedNodes([])
+        }
       },
       immediate: true
     }
@@ -185,7 +191,7 @@ export default {
   },
   mounted() {
     this.$bus.$on('clickOption', (val) => {
-      console.log('clickOption', val)
+      // console.log('clickOption', val)
       this.allChecked = val.allChecked
       this.footerVisible = val.footerVisible
     })

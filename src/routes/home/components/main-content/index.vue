@@ -52,19 +52,19 @@
               <el-checkbox :label="option"></el-checkbox>
               <div>
                 <span class="text-btn view-detail-btn" @click="viewDetail(option)" title="查看详细参数">i</span>
-                <el-dropdown trigger="click">
+                <!-- <el-dropdown trigger="click" @command="handleOnePhotoOptCmd">
                   <span class="el-dropdown-link">
                     <i class="text-btn el-icon-more-outline"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item icon="el-icon-files">添加到相册</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-star-off">添加等级</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-price-tag">添加标签</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-share">分享</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-download">下载</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-close">删除</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-files" command="album">添加到相册</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-star-off" command="rate">添加等级</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-price-tag" command="tag">添加标签</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-share" :command="{type: 'share', photoId: option.photoId}">分享</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-download" :command="{type: 'download', photoId: option.photoId}">下载</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-close" :command="{type: 'delete', photoId: option.photoId}">删除</el-dropdown-item>
                   </el-dropdown-menu>
-                </el-dropdown>
+                </el-dropdown> -->
               </div>
             </div>
             <div class="image-wrap">
@@ -72,7 +72,6 @@
                         :src="option.fileMinUrlPath"
                         fit="contain"
                         :data-src="option.fileUrlPath"></el-image>
-            <!-- FIXME: fileMinUrlPath => fileUrlPath -->
             </div>
             <div class="title-wrap typo-base">
               <div class="title single-ellipsis" :title="option.photoName">{{option.photoName | formatName}}</div>
@@ -121,7 +120,7 @@ export default {
   },
   data() {
     return {
-      orderValue: 'ptime_etf',
+      orderValue: 'utime_etf',
       orderOptions: $macro.ORDER_LIST,
       checkedOptions: [], // NOTE: 必须使用该命名
       currentPage: 1,
@@ -130,6 +129,14 @@ export default {
     }
   },
   methods: {
+    // handleOnePhotoOptCmd(cmd) {
+    //   this.$dialog({
+    //     message: cmd.type,
+    //     params: {
+    //       photoId: cmd.photoId
+    //     }
+    //   })
+    // },
     handleKeywordChange(val) {
       this.$emit('handleKeywordChange', val)
     },

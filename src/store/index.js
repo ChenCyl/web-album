@@ -21,8 +21,8 @@ export default new Vuex.Store({
     dateTree: [],
     checkDates: [],
     albums: [],
-    checkedOptionsCopy: [],
-    uploadCdt: {} // 上传条件
+    checkedOptionsCopy: []
+    // uploadCdt: {} // 上传条件
   },
   mutations: {
     updateFilter(state, payload) {
@@ -31,7 +31,7 @@ export default new Vuex.Store({
       // 更新 dateTree
       let tree = {}
       payload.dates.forEach(date => {
-        console.log(date)
+        // console.log(date)
         let dateArr = date.split('-')
         if (tree[dateArr[0]]) {
           if (tree[dateArr[0]][dateArr[1]]) {
@@ -55,21 +55,21 @@ export default new Vuex.Store({
       })
       // 格式化 tree
       let formatTree = []
-      for (let year of Object.keys(tree)) {
+      for (let year of Object.keys(tree).sort((x, y) => y - x)) {
         let node = {
           label: year,
           children: []
         }
-        for(let month of Object.keys(tree[year])) {
+        for(let month of Object.keys(tree[year]).sort((x, y) => y - x)) {
           node.children.push({
             label: month,
-            children: tree[year][month]
+            children: tree[year][month].sort((x, y) => y.label - x.label)
           })
         }
         formatTree.push(node)
       }
       state.dateTree = formatTree
-      console.log(state.dateTree)
+      // console.log(state.dateTree)
     },
     updateCheckDates(state, dates) {
       state.checkDates = dates
@@ -79,16 +79,16 @@ export default new Vuex.Store({
     },
     updateCheckedOptionsCopy(state, options) {
       state.checkedOptionsCopy = options
-    },
-    updateUploadCdt(state, payload) {
-      state.uploadCdt = payload
     }
+    // updateUploadCdt(state, payload) {
+    //   state.uploadCdt = payload
+    // }
   },
   actions: {
     // 获取所有照片中选择器的选项数据
     async fetchFilter({ commit }) {
       let res = await photoService.getFilter()
-      console.log('ssss',res)
+      // console.log('ssss',res)
 
       commit('updateFilter', {
         albums: res.data.albums.filter((item, i, arr) => {

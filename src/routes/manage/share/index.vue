@@ -89,7 +89,7 @@ export default {
   async mounted() {
     this.loading = true
     await this.getAllShare()
-    console.log('share', this.share)
+    // console.log('share', this.share)
     this.shareData = Object.values(this.share)
     this.loading = false
   },
@@ -110,7 +110,7 @@ export default {
     },
     async handleEdit(row) {
       this.loading = true
-      console.log('eidt', row)
+      // console.log('eidt', row)
       this.share[row.uuid] = row
       await this.saveAllShare()
       this.shareData = Object.values(this.share)

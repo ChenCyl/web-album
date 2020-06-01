@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { photoService } from '@/request/services'
 import dialogMixin from '@/core/mixins/dialogMixin'
 
@@ -29,6 +29,7 @@ export default {
     }).catch()
   },
   methods: {
+    ...mapActions(['fetchAlbums', 'fetchFilter']),
     async deletePhotosRequset() {
       this.fullscreenLoading = true
       await photoService.deletePhotos({
@@ -37,6 +38,8 @@ export default {
       this.fullscreenLoading = false
       this.$message.success('删除成功')
       this.$bus.$emit("flashContent")
+      this.fetchAlbums()
+      this.fetchFilter()
     }
   }
 }

@@ -79,7 +79,7 @@ export default {
       pageSize: 20,
       loading: false,
       total: 0,
-      orderValue: 'ptime_etf',
+      orderValue: 'utime_etf',
       albumName: '',
       albumId: '',
       albumForm: {
@@ -95,15 +95,18 @@ export default {
   },
   watch: {
     $route: {
-      handler(val) {
+      async handler(val) {
         this.albumId = val.params.id
         this._getPhoto()
+        if (!(this.albums && this.albums.length)) {
+          await this.fetchAlbums()
+        }
         let album = this.albums.find(item => +item.albumId === +this.albumId)
         if (album) {
           this.albumName = album.albumName
           this.albumForm.name = album.albumName
         } else {
-          console.log('相册已被删除')
+          // console.log('相册已被删除')
         }
       },
       deep: true,

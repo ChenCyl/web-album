@@ -36,12 +36,17 @@ export default {
     albumId: [String, Number]
   },
   methods: {
-    ...mapMutations(['updateUploadCdt']),
+    // ...mapMutations(['updateUploadCdt']),
     uploadPhotos() {
-      this.updateUploadCdt({
-        albumId: this.albumId || ''
+      // this.updateUploadCdt({
+      //   albumId: this.albumId || ''
+      // })
+      this.$dialog({
+        message: 'upload',
+        params: {
+          albumId: this.albumId || ''
+        }
       })
-      this.$dialog('upload')
     }
   }
 }

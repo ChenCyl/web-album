@@ -131,7 +131,6 @@ export default {
       })
     }
   }
-  // FIXME: 可能会用到的
   // dates = dates.map(dates => {
   // 接受的 timestamp 以秒为单位
   // return $moment.unix(dates).startOf('day').unix()

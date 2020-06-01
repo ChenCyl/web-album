@@ -50,7 +50,7 @@ export default {
     ...mapState(['filter', 'checkedOptionsCopy'])
   },
   created() {
-    console.log(this.filter)
+    // console.log(this.filter)
   },
   methods: {
     ...mapActions(['fetchFilter']),

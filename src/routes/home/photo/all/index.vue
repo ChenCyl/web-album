@@ -37,7 +37,7 @@ export default {
       loading: false,
       filter: {},
       total: 0,
-      orderValue: 'ptime_etf',
+      orderValue: 'utime_etf',
       searchKey: ''
     }
   },

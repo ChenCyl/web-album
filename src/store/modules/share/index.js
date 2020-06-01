@@ -25,7 +25,7 @@ const actions = {
     let uuid = getuuid()
     let link = 'http://localhost:8080/#/share/' + uuid  //FIXME:
     let now = $moment()
-    console.log(now.unix())
+    // console.log(now.unix())
     commit('updateShare', {
       photos: rootState.checkedOptionsCopy,
       title: data.title,

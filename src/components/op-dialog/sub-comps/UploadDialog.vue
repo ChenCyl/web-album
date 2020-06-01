@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { photoService } from '@/request/services'
 import dialogMixin from '@/core/mixins/dialogMixin'
 
@@ -39,25 +39,26 @@ export default {
     }
   },
   computed: {
-    ...mapState(['albums', 'checkedOptionsCopy', 'uploadCdt'])
+    ...mapState(['albums', 'checkedOptionsCopy'])
   },
   created() {
   },
   methods: {
+    ...mapActions(['fetchAlbums', 'fetchFilter']),
     async handleSuccess(response, file, fileList) {
-      console.log('upload success file', response)
-      await photoService.addPhoto({
+      // console.log('upload success file', response)
+      let res = await photoService.addPhoto({
         fileList: [response.data.number]
       })
-      if (this.uploadCdt.albumId) {
+      if (this.params && this.params.albumId) {
         await photoService.addToAlbum({
-          albumId: +this.uploadCdt.albumId,
-          photoIds: [response.data.number]
+          albumId: +this.params.albumId,
+          photoIds: res.data
         })
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
     },
     handlePreview(file) {
       this.viewerImageUrl = file.url
@@ -70,6 +71,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$bus.$emit('flashContent')
+        this.fetchAlbums()
+        this.fetchFilter()
         done()
       }).catch()
     }

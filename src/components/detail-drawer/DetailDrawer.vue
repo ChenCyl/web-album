@@ -45,7 +45,7 @@
               </el-popover>
             </el-form-item>
             <el-form-item label="所属相册">
-              <span>{{ detailData.album ? detailData.album.name : '暂无' }}</span> <!-- FIXME:多对一 -->
+              <span>{{ detailData.album ? detailData.album.name : '暂无' }}</span>
               <el-button type="text" @click="editAlbum(detailData.album)" icon="el-icon-edit"></el-button>
             </el-form-item>
             <el-form-item label="等级">
@@ -188,7 +188,7 @@
           </span>
           <el-form label-position="left" class="detail-form-cont">
             <el-form-item label="地点全称">
-              <span>{{ detailData.photoPlace || '暂无' }}</span> <!-- TODO: 后续确认 photo_place是这个还是方位 -->
+              <span>{{ detailData.photoPlace || '暂无' }}</span>
             </el-form-item>
             <el-form-item label="纬度">
               <span>{{ detailData.latitude || '暂无' }}</span>
@@ -208,11 +208,7 @@
           </el-form>
         </el-tab-pane>
       </el-tabs>
-
-
     </div>
-    <!-- TODO: 调用组件的地方可以传入图片id -->
-    <!-- <span>{{ message }}</span> -->
   </el-drawer>
 </template>
 
@@ -337,7 +333,7 @@ export default {
       let res = await photoService.getDetail({
         photoId: this.photoId
       })
-      console.log(res)
+      // console.log(res)
       this.detailData = res.data
       this.photoNameValue = this.detailData.photoName
       this.loading = false

@@ -68,7 +68,7 @@ export default {
     await this.getAllShare()
     if (this.share[uuid]) {
       this.shareData = this.share[uuid]
-      console.log('shareData', this.shareData)
+      // console.log('shareData', this.shareData)
     } else {
       this.$router.push('/404')
     }

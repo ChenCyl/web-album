@@ -31,7 +31,7 @@ export default {
       pageSize: 20,
       loading: false,
       total: 0,
-      orderValue: 'ptime_etf',
+      orderValue: 'utime_etf',
       searchKey: ''
     }
   },

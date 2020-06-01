@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
     // if (store.getters.token) {
     //   config.headers['X-Token'] = getToken()
     // }
-    console.log('request', config)
+    // console.log('request', config)
     return config
   },
   error => {
@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log('response', res)
+    // console.log('response', res)
     if (res.code !== 200) {
       Message({
         message: res.message || 'Error',

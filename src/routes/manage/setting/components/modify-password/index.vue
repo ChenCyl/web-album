@@ -139,7 +139,7 @@ export default {
       })
     },
     _getValiCode() {
-      let sec = 5 // FIXME: change to 60
+      let sec = 5 // NEXT VER.
       this.codeBtnText = `${sec}s 后重试`
       this.codeBtnDisabled = true
       let interval = setInterval(() => {

@@ -41,7 +41,6 @@ const actions = {
     const { userAccount, userPwd } = userInfo
     return new Promise((resolve, reject) => {
       userService.login({ userAccount: userAccount.trim(), userPwd: userPwd }).then(response => {
-        console.log('sdfsd',response)
         const { data } = response
         // commit('SET_TOKEN', data.token)
         // setToken(data.token)
@@ -66,7 +65,7 @@ const actions = {
         }
 
         commit('SET_NAME', data)
-        console.log('setneame', data)
+        // console.log('setneame', data)
         // commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
